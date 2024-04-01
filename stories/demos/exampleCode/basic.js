@@ -8,8 +8,11 @@ import {
   momentLocalizer,
 } from 'react-big-calendar'
 import DemoLink from '../../DemoLink.component'
-import events from '../../resources/events'
-import * as dates from '../../../src/utils/dates'
+import {
+  BackgroundEvents,
+  RandomResourceEvents,
+  ResourceMap,
+} from '../../resources/mock'
 
 const mLocalizer = momentLocalizer(moment)
 
@@ -29,13 +32,9 @@ export default function Basic({
   showDemoLink = true,
   ...props
 }) {
-  const { components, defaultDate, max, views } = useMemo(
+  const { defaultDate, views } = useMemo(
     () => ({
-      components: {
-        timeSlotWrapper: ColoredDateCellWrapper,
-      },
-      defaultDate: new Date(2015, 3, 1),
-      max: dates.add(dates.endOf(new Date(2015, 17, 1), 'day'), -1, 'hours'),
+      defaultDate: new Date(),
       views: Object.keys(Views).map((k) => Views[k]),
     }),
     []
@@ -46,14 +45,16 @@ export default function Basic({
       {showDemoLink ? <DemoLink fileName="basic" /> : null}
       <div className="height600" {...props}>
         <Calendar
-          components={components}
           defaultDate={defaultDate}
-          events={events}
+          events={RandomResourceEvents}
+          backgroundEvents={BackgroundEvents}
+          resources={ResourceMap}
           localizer={localizer}
-          max={max}
           showMultiDayTimes
           step={60}
           views={views}
+          resourceIdAccessor={'resourceId'}
+          resourceTitleAccessor={'resourceTitle'}
         />
       </div>
     </Fragment>
