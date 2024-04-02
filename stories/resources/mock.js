@@ -76,6 +76,7 @@ export const ResourceMap = [
       start: new Date(2024, currentMonth, currentDay, 12, 0, 0),
       end: new Date(2024, currentMonth, currentDay, 13, 0, 0),
     },
+    color: 'red',
   },
   {
     resourceId: 2,
@@ -84,6 +85,7 @@ export const ResourceMap = [
       start: new Date(2024, currentMonth, currentDay, 12, 0, 0),
       end: new Date(2024, currentMonth, currentDay, 13, 0, 0),
     },
+    color: 'green',
   },
   {
     resourceId: 3,
@@ -92,6 +94,7 @@ export const ResourceMap = [
       start: new Date(2024, currentMonth, currentDay, 12, 0, 0),
       end: new Date(2024, currentMonth, currentDay, 13, 0, 0),
     },
+    color: 'blue',
   },
   // {
   //   resourceId: 4,

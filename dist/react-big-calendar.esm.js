@@ -1804,6 +1804,15 @@ var EventRow = /*#__PURE__*/ (function (_React$Component) {
   ])
   return EventRow
 })(React.Component)
+EventRow.propTypes =
+  process.env.NODE_ENV !== 'production'
+    ? _objectSpread(
+        {
+          segments: PropTypes.array,
+        },
+        EventRowMixin.propTypes
+      )
+    : {}
 EventRow.defaultProps = _objectSpread({}, EventRowMixin.defaultProps)
 
 function endOfRange(_ref) {
@@ -3444,16 +3453,6 @@ var TimeSlotGroup = /*#__PURE__*/ (function (_Component) {
   ])
   return TimeSlotGroup
 })(Component)
-TimeSlotGroup.propTypes =
-  process.env.NODE_ENV !== 'production'
-    ? {
-        renderSlot: PropTypes.func,
-        group: PropTypes.array.isRequired,
-        resource: PropTypes.any,
-        components: PropTypes.object,
-        getters: PropTypes.object,
-      }
-    : {}
 
 function stringifyPercent(v) {
   return typeof v === 'string' ? v : v + '%'
@@ -4253,14 +4252,6 @@ var ResourceHeader = function ResourceHeader(_ref) {
   var label = _ref.label
   return /*#__PURE__*/ React.createElement(React.Fragment, null, label)
 }
-ResourceHeader.propTypes =
-  process.env.NODE_ENV !== 'production'
-    ? {
-        label: PropTypes.node,
-        index: PropTypes.number,
-        resource: PropTypes.object,
-      }
-    : {}
 
 var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
   _inherits(TimeGridHeader, _React$Component)
@@ -4279,131 +4270,80 @@ var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
       e.preventDefault()
       notify(_this.props.onDrillDown, [date, view])
     }
-    _this.renderRow = function (resource) {
-      var _this$props = _this.props,
-        events = _this$props.events,
-        rtl = _this$props.rtl,
-        selectable = _this$props.selectable,
-        getNow = _this$props.getNow,
-        range = _this$props.range,
-        getters = _this$props.getters,
-        localizer = _this$props.localizer,
-        accessors = _this$props.accessors,
-        components = _this$props.components,
-        resizable = _this$props.resizable
-      var resourceId = accessors.resourceId(resource)
-      var eventsToDisplay = resource
-        ? events.filter(function (event) {
-            return accessors.resource(event) === resourceId
-          })
-        : events
-      return /*#__PURE__*/ React.createElement(DateContentRow, {
-        isAllDay: true,
-        rtl: rtl,
-        getNow: getNow,
-        minRows: 2,
-        // Add +1 to include showMore button row in the row limit
-        maxRows: _this.props.allDayMaxRows + 1,
-        range: range,
-        events: eventsToDisplay,
-        resourceId: resourceId,
-        className: 'rbc-allday-cell',
-        selectable: selectable,
-        selected: _this.props.selected,
-        components: components,
-        accessors: accessors,
-        getters: getters,
-        localizer: localizer,
-        onSelect: _this.props.onSelectEvent,
-        onShowMore: _this.props.onShowMore,
-        onDoubleClick: _this.props.onDoubleClickEvent,
-        onKeyPress: _this.props.onKeyPressEvent,
-        onSelectSlot: _this.props.onSelectSlot,
-        longPressThreshold: _this.props.longPressThreshold,
-        resizable: resizable,
-      })
-    }
     return _this
   }
   _createClass(TimeGridHeader, [
     {
-      key: 'renderHeaderCells',
-      value: function renderHeaderCells(range) {
+      key: 'renderHeaderCell',
+      value: function renderHeaderCell(date, idx) {
         var _this2 = this
-        var _this$props2 = this.props,
-          localizer = _this$props2.localizer,
-          getDrilldownView = _this$props2.getDrilldownView,
-          getNow = _this$props2.getNow,
-          dayProp = _this$props2.getters.dayProp,
-          _this$props2$componen = _this$props2.components.header,
+        var _this$props = this.props,
+          localizer = _this$props.localizer,
+          getDrilldownView = _this$props.getDrilldownView,
+          getNow = _this$props.getNow,
+          dayProp = _this$props.getters.dayProp,
+          _this$props$component = _this$props.components.header,
           HeaderComponent =
-            _this$props2$componen === void 0 ? Header : _this$props2$componen
+            _this$props$component === void 0 ? Header : _this$props$component
         var today = getNow()
-        return range.map(function (date, i) {
-          var drilldownView = getDrilldownView(date)
-          var label = localizer.format(date, 'dayFormat')
-          var _dayProp = dayProp(date),
-            className = _dayProp.className,
-            style = _dayProp.style
-          var header = /*#__PURE__*/ React.createElement(HeaderComponent, {
-            date: date,
-            label: label,
-            localizer: localizer,
-          })
-          return /*#__PURE__*/ React.createElement(
-            'div',
-            {
-              key: i,
-              style: style,
-              className: clsx(
-                'rbc-header',
-                className,
-                localizer.isSameDate(date, today) && 'rbc-today'
-              ),
-            },
-            drilldownView
-              ? /*#__PURE__*/ React.createElement(
-                  'button',
-                  {
-                    type: 'button',
-                    className: 'rbc-button-link',
-                    onClick: function onClick(e) {
-                      return _this2.handleHeaderClick(date, drilldownView, e)
-                    },
-                  },
-                  header
-                )
-              : /*#__PURE__*/ React.createElement('span', null, header)
-          )
+        var drilldownView = getDrilldownView(date)
+        var label = localizer.format(date, 'dayFormat')
+        var _dayProp = dayProp(date),
+          className = _dayProp.className,
+          style = _dayProp.style
+        var header = /*#__PURE__*/ React.createElement(HeaderComponent, {
+          date: date,
+          label: label,
+          localizer: localizer,
         })
+        return /*#__PURE__*/ React.createElement(
+          'div',
+          {
+            key: idx,
+            style: style,
+            className: clsx(
+              'rbc-header',
+              className,
+              localizer.isSameDate(date, today) && 'rbc-today'
+            ),
+          },
+          drilldownView
+            ? /*#__PURE__*/ React.createElement(
+                'button',
+                {
+                  type: 'button',
+                  className: 'rbc-button-link',
+                  onClick: function onClick(e) {
+                    return _this2.handleHeaderClick(date, drilldownView, e)
+                  },
+                },
+                header
+              )
+            : /*#__PURE__*/ React.createElement('span', null, header)
+        )
       },
     },
     {
       key: 'render',
       value: function render() {
         var _this3 = this
-        var _this$props3 = this.props,
-          width = _this$props3.width,
-          rtl = _this$props3.rtl,
-          resources = _this$props3.resources,
-          range = _this$props3.range,
-          events = _this$props3.events,
-          getNow = _this$props3.getNow,
-          accessors = _this$props3.accessors,
-          selectable = _this$props3.selectable,
-          components = _this$props3.components,
-          getters = _this$props3.getters,
-          scrollRef = _this$props3.scrollRef,
-          localizer = _this$props3.localizer,
-          isOverflowing = _this$props3.isOverflowing,
-          _this$props3$componen = _this$props3.components,
-          TimeGutterHeader = _this$props3$componen.timeGutterHeader,
-          _this$props3$componen2 = _this$props3$componen.resourceHeader,
+        var _this$props2 = this.props,
+          width = _this$props2.width,
+          rtl = _this$props2.rtl,
+          resources = _this$props2.resources,
+          range = _this$props2.range,
+          accessors = _this$props2.accessors,
+          scrollRef = _this$props2.scrollRef,
+          isOverflowing = _this$props2.isOverflowing,
+          _this$props2$componen = _this$props2.components,
+          TimeGutterHeader = _this$props2$componen.timeGutterHeader,
+          _this$props2$componen2 = _this$props2$componen.resourceHeader,
           ResourceHeaderComponent =
-            _this$props3$componen2 === void 0
+            _this$props2$componen2 === void 0
               ? ResourceHeader
-              : _this$props3$componen2,
-          resizable = _this$props3.resizable
+              : _this$props2$componen2,
+          localizer = _this$props2.localizer,
+          getNow = _this$props2.getNow
         var style = {}
         if (isOverflowing) {
           style[rtl ? 'marginLeft' : 'marginRight'] = ''.concat(
@@ -4411,7 +4351,6 @@ var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
             'px'
           )
         }
-        var groupedEvents = resources.groupEvents(events)
         return /*#__PURE__*/ React.createElement(
           'div',
           {
@@ -4435,69 +4374,75 @@ var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
             TimeGutterHeader &&
               /*#__PURE__*/ React.createElement(TimeGutterHeader, null)
           ),
-          resources.map(function (_ref, idx) {
-            var _ref2 = _slicedToArray(_ref, 2),
-              id = _ref2[0],
-              resource = _ref2[1]
+          range.map(function (date, dateIdx) {
+            var today = getNow()
+            var isToday = localizer.isSameDate(date, today)
             return /*#__PURE__*/ React.createElement(
               'div',
               {
                 className: 'rbc-time-header-content',
-                key: id || idx,
+                key: dateIdx,
+                style: {
+                  borderRight: '1px solid #ddd',
+                },
               },
-              resource &&
-                /*#__PURE__*/ React.createElement(
-                  'div',
-                  {
-                    className: 'rbc-row rbc-row-resource',
-                    key: 'resource_'.concat(idx),
-                  },
-                  /*#__PURE__*/ React.createElement(
-                    'div',
-                    {
-                      className: 'rbc-header',
-                    },
-                    /*#__PURE__*/ React.createElement(ResourceHeaderComponent, {
-                      index: idx,
-                      label: accessors.resourceTitle(resource),
-                      resource: resource,
-                    })
-                  )
-                ),
               /*#__PURE__*/ React.createElement(
                 'div',
                 {
-                  className: 'rbc-row rbc-time-header-cell'.concat(
-                    range.length <= 1 ? ' rbc-time-header-cell-single-day' : ''
+                  className: clsx(
+                    'rbc-row rbc-time-header-cell',
+                    range.length <= 1 ? 'rbc-time-header-cell-single-day' : ''
                   ),
+                  style: {
+                    width: '100%',
+                  },
                 },
-                _this3.renderHeaderCells(range)
+                _this3.renderHeaderCell(date, dateIdx)
               ),
-              /*#__PURE__*/ React.createElement(DateContentRow, {
-                isAllDay: true,
-                rtl: rtl,
-                getNow: getNow,
-                minRows: 2,
-                // Add +1 to include showMore button row in the row limit
-                maxRows: _this3.props.allDayMaxRows + 1,
-                range: range,
-                events: groupedEvents.get(id) || [],
-                resourceId: resource && id,
-                className: 'rbc-allday-cell',
-                selectable: selectable,
-                selected: _this3.props.selected,
-                components: components,
-                accessors: accessors,
-                getters: getters,
-                localizer: localizer,
-                onSelect: _this3.props.onSelectEvent,
-                onShowMore: _this3.props.onShowMore,
-                onDoubleClick: _this3.props.onDoubleClickEvent,
-                onKeyDown: _this3.props.onKeyPressEvent,
-                onSelectSlot: _this3.props.onSelectSlot,
-                longPressThreshold: _this3.props.longPressThreshold,
-                resizable: resizable,
-              })
+              /*#__PURE__*/ React.createElement(
+                'div',
+                {
+                  style: {
+                    display: 'flex',
+                  },
+                  className: clsx(isToday ? 'rbc-today' : ''),
+                },
+                resources.map(function (_ref, resourceIdx) {
+                  var _ref2 = _slicedToArray(_ref, 2),
+                    id = _ref2[0],
+                    resource = _ref2[1]
+                  return /*#__PURE__*/ React.createElement(
+                    'div',
+                    {
+                      className: 'rbc-row rbc-row-resource',
+                      key: 'resource_'.concat(
+                        id !== null && id !== void 0 ? id : resourceIdx
+                      ),
+                      style: {
+                        flex: 1,
+                        borderLeft: resourceIdx > 0 ? '1px solid #ddd' : '',
+                      },
+                    },
+                    /*#__PURE__*/ React.createElement(
+                      'div',
+                      {
+                        className: 'rbc-header',
+                        style: {
+                          borderBottom: 'none',
+                        },
+                      },
+                      /*#__PURE__*/ React.createElement(
+                        ResourceHeaderComponent,
+                        {
+                          index: resourceIdx,
+                          label: accessors.resourceTitle(resource),
+                          resource: resource,
+                        }
+                      )
+                    )
+                  )
+                })
+              )
             )
           })
         )
@@ -4719,48 +4664,68 @@ var TimeGrid = /*#__PURE__*/ (function (_Component) {
         var resources = this.memoizedResources(this.props.resources, accessors)
         var groupedEvents = resources.groupEvents(events)
         var groupedBackgroundEvents = resources.groupEvents(backgroundEvents)
-        return resources.map(function (_ref, i) {
-          var _ref2 = _slicedToArray(_ref, 2),
-            id = _ref2[0],
-            resource = _ref2[1]
-          return range.map(function (date, jj) {
-            var daysEvents = (groupedEvents.get(id) || []).filter(function (
-              event
-            ) {
-              return localizer.inRange(
-                date,
-                accessors.start(event),
-                accessors.end(event),
-                'day'
-              )
-            })
-            var daysBackgroundEvents = (
-              groupedBackgroundEvents.get(id) || []
-            ).filter(function (event) {
-              return localizer.inRange(
-                date,
-                accessors.start(event),
-                accessors.end(event),
-                'day'
-              )
-            })
-            return /*#__PURE__*/ React.createElement(
-              DayColumn,
-              Object.assign({}, _this2.props, {
-                localizer: localizer,
-                min: localizer.merge(date, min),
-                max: localizer.merge(date, max),
-                resource: resource && id,
-                components: components,
-                isNow: localizer.isSameDate(date, now),
-                key: i + '-' + jj,
-                date: date,
-                events: daysEvents,
-                backgroundEvents: daysBackgroundEvents,
-                dayLayoutAlgorithm: dayLayoutAlgorithm,
+        return range.map(function (date, jj) {
+          return /*#__PURE__*/ React.createElement(
+            'div',
+            {
+              style: {
+                display: 'flex',
+                minHeight: '100%',
+                flex: 1,
+              },
+              key: jj,
+            },
+            resources.map(function (_ref, i) {
+              var _ref2 = _slicedToArray(_ref, 2),
+                id = _ref2[0],
+                resource = _ref2[1]
+              var daysEvents = (groupedEvents.get(id) || []).filter(function (
+                event
+              ) {
+                return localizer.inRange(
+                  date,
+                  accessors.start(event),
+                  accessors.end(event),
+                  'day'
+                )
               })
-            )
-          })
+              var daysBackgroundEvents = (
+                groupedBackgroundEvents.get(id) || []
+              ).filter(function (event) {
+                return localizer.inRange(
+                  date,
+                  accessors.start(event),
+                  accessors.end(event),
+                  'day'
+                )
+              })
+              return /*#__PURE__*/ React.createElement(
+                'div',
+                {
+                  style: {
+                    flex: 1,
+                  },
+                  key: accessors.resourceId(resource),
+                },
+                /*#__PURE__*/ React.createElement(
+                  DayColumn,
+                  Object.assign({}, _this2.props, {
+                    localizer: localizer,
+                    min: localizer.merge(date, min),
+                    max: localizer.merge(date, max),
+                    resource: resource && id,
+                    components: components,
+                    isNow: localizer.isSameDate(date, now),
+                    key: i + '-' + jj,
+                    date: date,
+                    events: daysEvents,
+                    backgroundEvents: daysBackgroundEvents,
+                    dayLayoutAlgorithm: dayLayoutAlgorithm,
+                  })
+                )
+              )
+            })
+          )
         })
       },
     },

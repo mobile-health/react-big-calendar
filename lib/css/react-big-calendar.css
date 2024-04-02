@@ -662,8 +662,8 @@ button.rbc-input::-moz-focus-inner {
   -webkit-box-flex: 1;
   -ms-flex: 1 1 0px;
   flex: 1 1 0;
-  -ms-flex-preferred-size: 0 px;
-  flex-basis: 0 px;
+  -ms-flex-preferred-size: 0px;
+  flex-basis: 0px;
 }
 
 .rbc-time-header-content + .rbc-time-header-content {
