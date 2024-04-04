@@ -523,6 +523,8 @@ export const getRandomMockResourceEvents = (type = 'month' | 'week') =>
     }
   })
 
+const COLORS = ['#1CA762', '#D56509', '#1791B2', '#6143B1', '#CC7A00']
+
 export const RandomResourceEvents = [
   {
     id: 0,
@@ -7878,4 +7880,5 @@ export const RandomResourceEvents = [
   ...item,
   start: new Date(item.start),
   end: new Date(item.end),
+  color: getRandom(COLORS),
 }))
