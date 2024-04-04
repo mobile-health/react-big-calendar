@@ -523,8 +523,6 @@ export const getRandomMockResourceEvents = (type = 'month' | 'week') =>
     }
   })
 
-console.log(getRandomMockResourceEvents('month'))
-
 export const RandomResourceEvents = [
   {
     id: 0,
