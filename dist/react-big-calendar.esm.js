@@ -2198,6 +2198,7 @@ var EventRowCustom = /*#__PURE__*/ (function (_React$Component) {
               },
               Object.keys(groupedByColors).map(function (color) {
                 return /*#__PURE__*/ React.createElement(Badge, {
+                  key: color,
                   bg: color,
                   count: groupedByColors[color].length,
                 })
@@ -2485,6 +2486,12 @@ var Header = function Header(_ref) {
     label
   )
 }
+Header.propTypes =
+  process.env.NODE_ENV !== 'production'
+    ? {
+        label: PropTypes.node,
+      }
+    : {}
 
 var DateHeader = function DateHeader(_ref) {
   var label = _ref.label,
@@ -4302,6 +4309,14 @@ var ResourceHeader = function ResourceHeader(_ref) {
   var label = _ref.label
   return /*#__PURE__*/ React.createElement(React.Fragment, null, label)
 }
+ResourceHeader.propTypes =
+  process.env.NODE_ENV !== 'production'
+    ? {
+        label: PropTypes.node,
+        index: PropTypes.number,
+        resource: PropTypes.object,
+      }
+    : {}
 
 var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
   _inherits(TimeGridHeader, _React$Component)

@@ -65848,6 +65848,7 @@
                 },
                 Object.keys(groupedByColors).map(function (color) {
                   return /*#__PURE__*/ React.createElement(Badge, {
+                    key: color,
                     bg: color,
                     count: groupedByColors[color].length,
                   })
@@ -67786,16 +67787,6 @@
     ])
     return TimeSlotGroup
   })(reactExports.Component)
-  TimeSlotGroup.propTypes =
-    'development' !== 'production'
-      ? {
-          renderSlot: propTypesExports.func,
-          group: propTypesExports.array.isRequired,
-          resource: propTypesExports.any,
-          components: propTypesExports.object,
-          getters: propTypesExports.object,
-        }
-      : {}
 
   function stringifyPercent(v) {
     return typeof v === 'string' ? v : v + '%'

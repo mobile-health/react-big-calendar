@@ -41,7 +41,11 @@ class EventRowCustom extends React.Component {
               }}
             >
               {Object.keys(groupedByColors).map((color) => (
-                <Badge bg={color} count={groupedByColors[color].length} />
+                <Badge
+                  key={color}
+                  bg={color}
+                  count={groupedByColors[color].length}
+                />
               ))}
             </div>
           )
