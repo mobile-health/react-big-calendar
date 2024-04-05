@@ -47,7 +47,7 @@
 
   function toPropertyKey(t) {
     var i = toPrimitive(t, 'string')
-    return 'symbol' == _typeof(i) ? i : String(i)
+    return 'symbol' == _typeof(i) ? i : i + ''
   }
 
   function _defineProperty$1(obj, key, value) {
@@ -66135,6 +66135,12 @@
       label
     )
   }
+  Header.propTypes =
+    'development' !== 'production'
+      ? {
+          label: propTypesExports.node,
+        }
+      : {}
 
   var DateHeader = function DateHeader(_ref) {
     var label = _ref.label,
@@ -67780,6 +67786,16 @@
     ])
     return TimeSlotGroup
   })(reactExports.Component)
+  TimeSlotGroup.propTypes =
+    'development' !== 'production'
+      ? {
+          renderSlot: propTypesExports.func,
+          group: propTypesExports.array.isRequired,
+          resource: propTypesExports.any,
+          components: propTypesExports.object,
+          getters: propTypesExports.object,
+        }
+      : {}
 
   function stringifyPercent(v) {
     return typeof v === 'string' ? v : v + '%'
