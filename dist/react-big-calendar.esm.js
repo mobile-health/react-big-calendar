@@ -52,6 +52,7 @@ import listen from 'dom-helpers/listen'
 import findIndex from 'lodash/findIndex'
 import range$1 from 'lodash/range'
 import memoize from 'memoize-one'
+import { groupBy } from 'lodash'
 import sortBy from 'lodash/sortBy'
 import scrollbarSize from 'dom-helpers/scrollbarSize'
 import getWidth from 'dom-helpers/width'
@@ -1804,15 +1805,6 @@ var EventRow = /*#__PURE__*/ (function (_React$Component) {
   ])
   return EventRow
 })(React.Component)
-EventRow.propTypes =
-  process.env.NODE_ENV !== 'production'
-    ? _objectSpread(
-        {
-          segments: PropTypes.array,
-        },
-        EventRowMixin.propTypes
-      )
-    : {}
 EventRow.defaultProps = _objectSpread({}, EventRowMixin.defaultProps)
 
 function endOfRange(_ref) {
@@ -2149,6 +2141,76 @@ function getSlotMetrics$1() {
   }, isEqual)
 }
 
+var Badge = function Badge(_ref) {
+  var bg = _ref.bg,
+    count = _ref.count
+  return /*#__PURE__*/ React.createElement(
+    'span',
+    {
+      className: 'custom-day-event-count',
+      style: {
+        background: bg,
+      },
+    },
+    count
+  )
+}
+var per = (1 / 7) * 100 + '%'
+var EventRowCustom = /*#__PURE__*/ (function (_React$Component) {
+  _inherits(EventRowCustom, _React$Component)
+  function EventRowCustom() {
+    _classCallCheck(this, EventRowCustom)
+    return _callSuper(this, EventRowCustom, arguments)
+  }
+  _createClass(EventRowCustom, [
+    {
+      key: 'render',
+      value: function render() {
+        var _this$props = this.props,
+          events = _this$props.events,
+          range = _this$props.range,
+          localizer = _this$props.localizer
+        return /*#__PURE__*/ React.createElement(
+          'div',
+          {
+            className: 'rbc-row',
+          },
+          range.map(function (day, key) {
+            var dayEvents = events
+              .map(function (item) {
+                return item.event
+              })
+              .filter(function (event) {
+                return localizer.isSameDate(event.start, day)
+              })
+            var groupedByColors = groupBy(dayEvents, 'color')
+            return /*#__PURE__*/ React.createElement(
+              'div',
+              {
+                key: key,
+                className: 'rbc-row-segment',
+                // IE10/11 need max-width. flex-basis doesn't respect box-sizing
+                style: {
+                  WebkitFlexBasis: per,
+                  flexBasis: per,
+                  maxWidth: per,
+                },
+              },
+              Object.keys(groupedByColors).map(function (color) {
+                return /*#__PURE__*/ React.createElement(Badge, {
+                  bg: color,
+                  count: groupedByColors[color].length,
+                })
+              })
+            )
+          })
+        )
+      },
+    },
+  ])
+  return EventRowCustom
+})(React.Component)
+
 var DateContentRow = /*#__PURE__*/ (function (_React$Component) {
   _inherits(DateContentRow, _React$Component)
   function DateContentRow() {
@@ -2307,8 +2369,8 @@ var DateContentRow = /*#__PURE__*/ (function (_React$Component) {
           showAllEvents = _this$props5.showAllEvents
         if (renderForMeasure) return this.renderDummy()
         var metrics = this.slotMetrics(this.props)
-        var levels = metrics.levels,
-          extra = metrics.extra
+        metrics.levels
+        var extra = metrics.extra
         var ScrollableWeekComponent = showAllEvents
           ? ScrollableWeekWrapper
           : NoopWrapper
@@ -2325,6 +2387,7 @@ var DateContentRow = /*#__PURE__*/ (function (_React$Component) {
           resourceId: resourceId,
           slotMetrics: metrics,
           resizable: resizable,
+          range: range,
         }
         return /*#__PURE__*/ React.createElement(
           'div',
@@ -2381,17 +2444,10 @@ var DateContentRow = /*#__PURE__*/ (function (_React$Component) {
                     rtl: this.props.rtl,
                   }
                 ),
-                levels.map(function (segs, idx) {
-                  return /*#__PURE__*/ React.createElement(
-                    EventRow,
-                    Object.assign(
-                      {
-                        key: idx,
-                        segments: segs,
-                      },
-                      eventRowProps
-                    )
-                  )
+                /*#__PURE__*/ React.createElement(EventRowCustom, {
+                  events: extra,
+                  range: range,
+                  localizer: localizer,
                 }),
                 !!extra.length &&
                   /*#__PURE__*/ React.createElement(
@@ -2429,12 +2485,6 @@ var Header = function Header(_ref) {
     label
   )
 }
-Header.propTypes =
-  process.env.NODE_ENV !== 'production'
-    ? {
-        label: PropTypes.node,
-      }
-    : {}
 
 var DateHeader = function DateHeader(_ref) {
   var label = _ref.label,
