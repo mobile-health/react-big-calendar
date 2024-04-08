@@ -10,6 +10,7 @@ import EventEndingRow from './EventEndingRow'
 import NoopWrapper from './NoopWrapper'
 import ScrollableWeekWrapper from './ScrollableWeekWrapper'
 import * as DateSlotMetrics from './utils/DateSlotMetrics'
+import EventRowCustom from './EventRowCustom'
 
 class DateContentRow extends React.Component {
   constructor(...args) {
@@ -147,6 +148,7 @@ class DateContentRow extends React.Component {
       resourceId,
       slotMetrics: metrics,
       resizable,
+      range,
     }
 
     return (
@@ -181,10 +183,16 @@ class DateContentRow extends React.Component {
             </div>
           )}
           <ScrollableWeekComponent>
-            <WeekWrapper isAllDay={isAllDay} {...eventRowProps} rtl={this.props.rtl}>
-              {levels.map((segs, idx) => (
-                <EventRow key={idx} segments={segs} {...eventRowProps} />
-              ))}
+            <WeekWrapper
+              isAllDay={isAllDay}
+              {...eventRowProps}
+              rtl={this.props.rtl}
+            >
+              <EventRowCustom
+                events={extra}
+                range={range}
+                localizer={localizer}
+              />
               {!!extra.length && (
                 <EventEndingRow
                   segments={extra}
