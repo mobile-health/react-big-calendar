@@ -484,12 +484,12 @@ var _excluded$7 = [
   'slotEnd',
 ]
 var EventCell = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(EventCell, _React$Component)
   function EventCell() {
     _classCallCheck(this, EventCell)
     return _callSuper(this, EventCell, arguments)
   }
-  _createClass(EventCell, [
+  _inherits(EventCell, _React$Component)
+  return _createClass(EventCell, [
     {
       key: 'render',
       value: function render() {
@@ -575,7 +575,6 @@ var EventCell = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return EventCell
 })(React.Component)
 
 function isSelected(event, selected) {
@@ -962,6 +961,8 @@ var Selection = /*#__PURE__*/ (function () {
       validContainers =
         _ref3$validContainers === void 0 ? [] : _ref3$validContainers
     _classCallCheck(this, Selection)
+    this._initialEvent = null
+    this.selecting = false
     this.isDetached = false
     this.container = node
     this.globalMouse = !node || global
@@ -995,7 +996,7 @@ var Selection = /*#__PURE__*/ (function () {
     )
     this._addInitialEventListener()
   }
-  _createClass(Selection, [
+  return _createClass(Selection, [
     {
       key: 'on',
       value: function on(type, handler) {
@@ -1032,6 +1033,11 @@ var Selection = /*#__PURE__*/ (function () {
     {
       key: 'teardown',
       value: function teardown() {
+        this._initialEvent = null
+        this._initialEventData = null
+        this._selectRect = null
+        this.selecting = false
+        this._lastClickData = null
         this.isDetached = true
         this._listeners = Object.create(null)
         this._removeTouchMoveWindowListener &&
@@ -1186,6 +1192,7 @@ var Selection = /*#__PURE__*/ (function () {
     {
       key: '_handleInitialEvent',
       value: function _handleInitialEvent(e) {
+        this._initialEvent = e
         if (this.isDetached) {
           return
         }
@@ -1285,38 +1292,42 @@ var Selection = /*#__PURE__*/ (function () {
     {
       key: '_handleTerminatingEvent',
       value: function _handleTerminatingEvent(e) {
-        var _getEventCoordinates4 = getEventCoordinates(e),
-          pageX = _getEventCoordinates4.pageX,
-          pageY = _getEventCoordinates4.pageY
+        var selecting = this.selecting
+        var bounds = this._selectRect
+        // If it's not in selecting state, it's a click event
+        if (!selecting && e.type.includes('key')) {
+          e = this._initialEvent
+        }
         this.selecting = false
         this._removeEndListener && this._removeEndListener()
         this._removeMoveListener && this._removeMoveListener()
-        if (!this._initialEventData) return
+        this._selectRect = null
+        this._initialEvent = null
+        this._initialEventData = null
+        this._lastClickData = null
+        if (!e) return
         var inRoot = !this.container || contains(this.container(), e.target)
         var isWithinValidContainer = this._isWithinValidContainer(e)
-        var bounds = this._selectRect
-        var click = this.isClick(pageX, pageY)
-        this._initialEventData = null
         if (e.key === 'Escape' || !isWithinValidContainer) {
           return this.emit('reset')
         }
-        if (click && inRoot) {
+        if (!selecting && inRoot) {
           return this._handleClickEvent(e)
         }
 
         // User drag-clicked in the Selectable area
-        if (!click) return this.emit('select', bounds)
+        if (selecting) return this.emit('select', bounds)
         return this.emit('reset')
       },
     },
     {
       key: '_handleClickEvent',
       value: function _handleClickEvent(e) {
-        var _getEventCoordinates5 = getEventCoordinates(e),
-          pageX = _getEventCoordinates5.pageX,
-          pageY = _getEventCoordinates5.pageY,
-          clientX = _getEventCoordinates5.clientX,
-          clientY = _getEventCoordinates5.clientY
+        var _getEventCoordinates4 = getEventCoordinates(e),
+          pageX = _getEventCoordinates4.pageX,
+          pageY = _getEventCoordinates4.pageY,
+          clientX = _getEventCoordinates4.clientX,
+          clientY = _getEventCoordinates4.clientY
         var now = new Date().getTime()
         if (
           this._lastClickData &&
@@ -1353,34 +1364,35 @@ var Selection = /*#__PURE__*/ (function () {
         var _this$_initialEventDa = this._initialEventData,
           x = _this$_initialEventDa.x,
           y = _this$_initialEventDa.y
-        var _getEventCoordinates6 = getEventCoordinates(e),
-          pageX = _getEventCoordinates6.pageX,
-          pageY = _getEventCoordinates6.pageY
+        var _getEventCoordinates5 = getEventCoordinates(e),
+          pageX = _getEventCoordinates5.pageX,
+          pageY = _getEventCoordinates5.pageY
         var w = Math.abs(x - pageX)
         var h = Math.abs(y - pageY)
         var left = Math.min(pageX, x),
           top = Math.min(pageY, y),
           old = this.selecting
-
+        var click = this.isClick(pageX, pageY)
         // Prevent emitting selectStart event until mouse is moved.
         // in Chrome on Windows, mouseMove event may be fired just after mouseDown event.
-        if (this.isClick(pageX, pageY) && !old && !(w || h)) {
+        if (click && !old && !(w || h)) {
           return
         }
-        this.selecting = true
-        this._selectRect = {
-          top: top,
-          left: left,
-          x: pageX,
-          y: pageY,
-          right: left + w,
-          bottom: top + h,
-        }
-        if (!old) {
+        if (!old && !click) {
           this.emit('selectStart', this._initialEventData)
         }
-        if (!this.isClick(pageX, pageY))
+        if (!click) {
+          this.selecting = true
+          this._selectRect = {
+            top: top,
+            left: left,
+            x: pageX,
+            y: pageY,
+            right: left + w,
+            bottom: top + h,
+          }
           this.emit('selecting', this._selectRect)
+        }
         e.preventDefault()
       },
     },
@@ -1405,7 +1417,6 @@ var Selection = /*#__PURE__*/ (function () {
       },
     },
   ])
-  return Selection
 })()
 /**
  * Resolve the disance prop from either an Int or an Object
@@ -1486,7 +1497,6 @@ function pageOffset(dir) {
 }
 
 var BackgroundCells = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(BackgroundCells, _React$Component)
   function BackgroundCells(props, context) {
     var _this
     _classCallCheck(this, BackgroundCells)
@@ -1497,7 +1507,8 @@ var BackgroundCells = /*#__PURE__*/ (function (_React$Component) {
     _this.containerRef = /*#__PURE__*/ createRef()
     return _this
   }
-  _createClass(BackgroundCells, [
+  _inherits(BackgroundCells, _React$Component)
+  return _createClass(BackgroundCells, [
     {
       key: 'componentDidMount',
       value: function componentDidMount() {
@@ -1689,7 +1700,6 @@ var BackgroundCells = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return BackgroundCells
 })(React.Component)
 
 /* eslint-disable react/prop-types */
@@ -1763,12 +1773,12 @@ var EventRowMixin = {
 }
 
 var EventRow = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(EventRow, _React$Component)
   function EventRow() {
     _classCallCheck(this, EventRow)
     return _callSuper(this, EventRow, arguments)
   }
-  _createClass(EventRow, [
+  _inherits(EventRow, _React$Component)
+  return _createClass(EventRow, [
     {
       key: 'render',
       value: function render() {
@@ -1803,7 +1813,6 @@ var EventRow = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return EventRow
 })(React.Component)
 EventRow.defaultProps = _objectSpread({}, EventRowMixin.defaultProps)
 
@@ -1948,12 +1957,12 @@ var eventsInSlot = function eventsInSlot(segments, slot) {
     })
 }
 var EventEndingRow = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(EventEndingRow, _React$Component)
   function EventEndingRow() {
     _classCallCheck(this, EventEndingRow)
     return _callSuper(this, EventEndingRow, arguments)
   }
-  _createClass(EventEndingRow, [
+  _inherits(EventEndingRow, _React$Component)
+  return _createClass(EventEndingRow, [
     {
       key: 'render',
       value: function render() {
@@ -2056,7 +2065,6 @@ var EventEndingRow = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return EventEndingRow
 })(React.Component)
 EventEndingRow.defaultProps = _objectSpread({}, EventRowMixin.defaultProps)
 
@@ -2157,12 +2165,12 @@ var Badge = function Badge(_ref) {
 }
 var per = (1 / 7) * 100 + '%'
 var EventRowCustom = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(EventRowCustom, _React$Component)
   function EventRowCustom() {
     _classCallCheck(this, EventRowCustom)
     return _callSuper(this, EventRowCustom, arguments)
   }
-  _createClass(EventRowCustom, [
+  _inherits(EventRowCustom, _React$Component)
+  return _createClass(EventRowCustom, [
     {
       key: 'render',
       value: function render() {
@@ -2209,11 +2217,9 @@ var EventRowCustom = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return EventRowCustom
 })(React.Component)
 
 var DateContentRow = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(DateContentRow, _React$Component)
   function DateContentRow() {
     var _this
     _classCallCheck(this, DateContentRow)
@@ -2324,7 +2330,8 @@ var DateContentRow = /*#__PURE__*/ (function (_React$Component) {
     _this.slotMetrics = getSlotMetrics$1()
     return _this
   }
-  _createClass(DateContentRow, [
+  _inherits(DateContentRow, _React$Component)
+  return _createClass(DateContentRow, [
     {
       key: 'getRowLimit',
       value: function getRowLimit() {
@@ -2468,7 +2475,6 @@ var DateContentRow = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return DateContentRow
 })(React.Component)
 DateContentRow.defaultProps = {
   minRows: 0,
@@ -2525,7 +2531,6 @@ var eventsForWeek = function eventsForWeek(
   })
 }
 var MonthView = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(MonthView, _React$Component)
   function MonthView() {
     var _this
     _classCallCheck(this, MonthView)
@@ -2714,7 +2719,8 @@ var MonthView = /*#__PURE__*/ (function (_React$Component) {
     _this._pendingSelection = []
     return _this
   }
-  _createClass(
+  _inherits(MonthView, _React$Component)
+  return _createClass(
     MonthView,
     [
       {
@@ -2936,7 +2942,6 @@ var MonthView = /*#__PURE__*/ (function (_React$Component) {
       },
     ]
   )
-  return MonthView
 })(React.Component)
 MonthView.range = function (date, _ref3) {
   var localizer = _ref3.localizer
@@ -3130,7 +3135,7 @@ var Event = /*#__PURE__*/ (function () {
   /**
    * The event's width without any overlap.
    */
-  _createClass(Event, [
+  return _createClass(Event, [
     {
       key: '_width',
       get: function get() {
@@ -3206,7 +3211,6 @@ var Event = /*#__PURE__*/ (function () {
       },
     },
   ])
-  return Event
 })()
 /**
  * Return true if event a and b is considered to be on the same row.
@@ -3455,12 +3459,12 @@ function getStyledEvents(_ref) {
 }
 
 var TimeSlotGroup = /*#__PURE__*/ (function (_Component) {
-  _inherits(TimeSlotGroup, _Component)
   function TimeSlotGroup() {
     _classCallCheck(this, TimeSlotGroup)
     return _callSuper(this, TimeSlotGroup, arguments)
   }
-  _createClass(TimeSlotGroup, [
+  _inherits(TimeSlotGroup, _Component)
+  return _createClass(TimeSlotGroup, [
     {
       key: 'render',
       value: function render() {
@@ -3508,7 +3512,6 @@ var TimeSlotGroup = /*#__PURE__*/ (function (_Component) {
       },
     },
   ])
-  return TimeSlotGroup
 })(Component)
 
 function stringifyPercent(v) {
@@ -3643,7 +3646,6 @@ var _excluded$5 = ['dayProp'],
   _excluded2$1 = ['eventContainerWrapper']
 var slotMetrics
 var DayColumn = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(DayColumn, _React$Component)
   function DayColumn() {
     var _this
     _classCallCheck(this, DayColumn)
@@ -3927,7 +3929,8 @@ var DayColumn = /*#__PURE__*/ (function (_React$Component) {
     _this.containerRef = /*#__PURE__*/ createRef()
     return _this
   }
-  _createClass(
+  _inherits(DayColumn, _React$Component)
+  return _createClass(
     DayColumn,
     [
       {
@@ -4120,22 +4123,21 @@ var DayColumn = /*#__PURE__*/ (function (_React$Component) {
                 })
               )
             ),
-            selecting &&
-              /*#__PURE__*/ React.createElement(
-                'div',
-                {
-                  className: 'rbc-slot-selection',
-                  style: {
-                    top: top,
-                    height: height,
-                  },
+            /*#__PURE__*/ React.createElement(
+              'div',
+              {
+                className: 'rbc-slot-selection',
+                style: {
+                  top: top,
+                  height: height,
                 },
-                /*#__PURE__*/ React.createElement(
-                  'span',
-                  null,
-                  localizer.format(selectDates, 'selectRangeFormat')
-                )
-              ),
+              },
+              /*#__PURE__*/ React.createElement(
+                'span',
+                null,
+                localizer.format(selectDates, 'selectRangeFormat')
+              )
+            ),
             isNow &&
               this.intervalTriggered &&
               /*#__PURE__*/ React.createElement('div', {
@@ -4160,7 +4162,6 @@ var DayColumn = /*#__PURE__*/ (function (_React$Component) {
       },
     ]
   )
-  return DayColumn
 })(React.Component)
 DayColumn.defaultProps = {
   dragThroughEvents: true,
@@ -4309,17 +4310,8 @@ var ResourceHeader = function ResourceHeader(_ref) {
   var label = _ref.label
   return /*#__PURE__*/ React.createElement(React.Fragment, null, label)
 }
-ResourceHeader.propTypes =
-  process.env.NODE_ENV !== 'production'
-    ? {
-        label: PropTypes.node,
-        index: PropTypes.number,
-        resource: PropTypes.object,
-      }
-    : {}
 
 var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(TimeGridHeader, _React$Component)
   function TimeGridHeader() {
     var _this
     _classCallCheck(this, TimeGridHeader)
@@ -4337,7 +4329,8 @@ var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
     }
     return _this
   }
-  _createClass(TimeGridHeader, [
+  _inherits(TimeGridHeader, _React$Component)
+  return _createClass(TimeGridHeader, [
     {
       key: 'renderHeaderCell',
       value: function renderHeaderCell(date, idx) {
@@ -4514,7 +4507,6 @@ var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return TimeGridHeader
 })(React.Component)
 
 var NONE = {}
@@ -4553,7 +4545,6 @@ function Resources(resources, accessors) {
 }
 
 var TimeGrid = /*#__PURE__*/ (function (_Component) {
-  _inherits(TimeGrid, _Component)
   function TimeGrid(props) {
     var _this
     _classCallCheck(this, TimeGrid)
@@ -4680,7 +4671,8 @@ var TimeGrid = /*#__PURE__*/ (function (_Component) {
     _this.gutterRef = /*#__PURE__*/ createRef()
     return _this
   }
-  _createClass(TimeGrid, [
+  _inherits(TimeGrid, _Component)
+  return _createClass(TimeGrid, [
     {
       key: 'getSnapshotBeforeUpdate',
       value: function getSnapshotBeforeUpdate() {
@@ -5027,7 +5019,6 @@ var TimeGrid = /*#__PURE__*/ (function (_Component) {
       },
     },
   ])
-  return TimeGrid
 })(Component)
 TimeGrid.defaultProps = {
   step: 30,
@@ -5043,12 +5034,12 @@ var _excluded$4 = [
   'enableAutoScroll',
 ]
 var Day = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(Day, _React$Component)
   function Day() {
     _classCallCheck(this, Day)
     return _callSuper(this, Day, arguments)
   }
-  _createClass(Day, [
+  _inherits(Day, _React$Component)
+  return _createClass(Day, [
     {
       key: 'render',
       value: function render() {
@@ -5097,7 +5088,6 @@ var Day = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return Day
 })(React.Component)
 Day.range = function (date, _ref) {
   var localizer = _ref.localizer
@@ -5128,12 +5118,12 @@ var _excluded$3 = [
   'enableAutoScroll',
 ]
 var Week = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(Week, _React$Component)
   function Week() {
     _classCallCheck(this, Week)
     return _callSuper(this, Week, arguments)
   }
-  _createClass(Week, [
+  _inherits(Week, _React$Component)
+  return _createClass(Week, [
     {
       key: 'render',
       value: function render() {
@@ -5180,7 +5170,6 @@ var Week = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return Week
 })(React.Component)
 Week.defaultProps = TimeGrid.defaultProps
 Week.navigate = function (date, action, _ref) {
@@ -5232,12 +5221,12 @@ function workWeekRange(date, options) {
   })
 }
 var WorkWeek = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(WorkWeek, _React$Component)
   function WorkWeek() {
     _classCallCheck(this, WorkWeek)
     return _callSuper(this, WorkWeek, arguments)
   }
-  _createClass(WorkWeek, [
+  _inherits(WorkWeek, _React$Component)
+  return _createClass(WorkWeek, [
     {
       key: 'render',
       value: function render() {
@@ -5284,7 +5273,6 @@ var WorkWeek = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return WorkWeek
 })(React.Component)
 WorkWeek.defaultProps = TimeGrid.defaultProps
 WorkWeek.range = workWeekRange
@@ -5639,7 +5627,6 @@ function moveDate(View, _ref) {
 }
 
 var Toolbar = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(Toolbar, _React$Component)
   function Toolbar() {
     var _this
     _classCallCheck(this, Toolbar)
@@ -5659,7 +5646,8 @@ var Toolbar = /*#__PURE__*/ (function (_React$Component) {
     }
     return _this
   }
-  _createClass(Toolbar, [
+  _inherits(Toolbar, _React$Component)
+  return _createClass(Toolbar, [
     {
       key: 'render',
       value: function render() {
@@ -5743,7 +5731,6 @@ var Toolbar = /*#__PURE__*/ (function (_React$Component) {
       },
     },
   ])
-  return Toolbar
 })(React.Component)
 
 /**
@@ -5816,7 +5803,6 @@ function isValidView(view, _ref) {
   return names.indexOf(view) !== -1
 }
 var Calendar = /*#__PURE__*/ (function (_React$Component) {
-  _inherits(Calendar, _React$Component)
   function Calendar() {
     var _this
     _classCallCheck(this, Calendar)
@@ -5971,7 +5957,8 @@ var Calendar = /*#__PURE__*/ (function (_React$Component) {
     }
     return _this
   }
-  _createClass(
+  _inherits(Calendar, _React$Component)
+  return _createClass(
     Calendar,
     [
       {
@@ -6160,7 +6147,6 @@ var Calendar = /*#__PURE__*/ (function (_React$Component) {
       },
     ]
   )
-  return Calendar
 })(React.Component)
 Calendar.defaultProps = {
   events: [],

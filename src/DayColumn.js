@@ -170,11 +170,14 @@ class DayColumn extends React.Component {
           </div>
         </EventContainer>
 
-        {selecting && (
+        {/* {selecting && (
           <div className="rbc-slot-selection" style={{ top, height }}>
             <span>{localizer.format(selectDates, 'selectRangeFormat')}</span>
           </div>
-        )}
+        )} */}
+        <div className="rbc-slot-selection" style={{ top, height }}>
+          <span>{localizer.format(selectDates, 'selectRangeFormat')}</span>
+        </div>
         {isNow && this.intervalTriggered && (
           <div
             className="rbc-current-time-indicator"

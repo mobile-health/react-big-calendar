@@ -93,7 +93,7 @@
     return e
   }
 
-  function _objectWithoutPropertiesLoose$2(source, excluded) {
+  function _objectWithoutPropertiesLoose(source, excluded) {
     if (source == null) return {}
     var target = {}
     var sourceKeys = Object.keys(source)
@@ -108,7 +108,7 @@
 
   function _objectWithoutProperties(source, excluded) {
     if (source == null) return {}
-    var target = _objectWithoutPropertiesLoose$2(source, excluded)
+    var target = _objectWithoutPropertiesLoose(source, excluded)
     var key, i
     if (Object.getOwnPropertySymbols) {
       var sourceSymbolKeys = Object.getOwnPropertySymbols(source)
@@ -198,14 +198,14 @@
     )
   }
 
-  function _setPrototypeOf$1(o, p) {
-    _setPrototypeOf$1 = Object.setPrototypeOf
+  function _setPrototypeOf(o, p) {
+    _setPrototypeOf = Object.setPrototypeOf
       ? Object.setPrototypeOf.bind()
       : function _setPrototypeOf(o, p) {
           o.__proto__ = p
           return o
         }
-    return _setPrototypeOf$1(o, p)
+    return _setPrototypeOf(o, p)
   }
 
   function _inherits(subClass, superClass) {
@@ -222,7 +222,7 @@
     Object.defineProperty(subClass, 'prototype', {
       writable: false,
     })
-    if (superClass) _setPrototypeOf$1(subClass, superClass)
+    if (superClass) _setPrototypeOf(subClass, superClass)
   }
 
   function _arrayWithHoles(arr) {
@@ -3155,8 +3155,8 @@
 
   var React = /*@__PURE__*/ getDefaultExportFromCjs(reactExports)
 
-  function _extends$2() {
-    _extends$2 = Object.assign
+  function _extends() {
+    _extends = Object.assign
       ? Object.assign.bind()
       : function (target) {
           for (var i = 1; i < arguments.length; i++) {
@@ -3169,20 +3169,7 @@
           }
           return target
         }
-    return _extends$2.apply(this, arguments)
-  }
-
-  function _objectWithoutPropertiesLoose$1(source, excluded) {
-    if (source == null) return {}
-    var target = {}
-    var sourceKeys = Object.keys(source)
-    var key, i
-    for (i = 0; i < sourceKeys.length; i++) {
-      key = sourceKeys[i]
-      if (excluded.indexOf(key) >= 0) continue
-      target[key] = source[key]
-    }
-    return target
+    return _extends.apply(this, arguments)
   }
 
   /**
@@ -3291,16 +3278,6 @@
       (typeof component !== 'function' ||
         (component.prototype && component.prototype.isReactComponent))
     )
-  }
-
-  function _setPrototypeOf(o, p) {
-    _setPrototypeOf = Object.setPrototypeOf
-      ? Object.setPrototypeOf.bind()
-      : function _setPrototypeOf(o, p) {
-          o.__proto__ = p
-          return o
-        }
-    return _setPrototypeOf(o, p)
   }
 
   function _inheritsLoose(subClass, superClass) {
@@ -3551,7 +3528,7 @@
 
                   var values = _ref.values
                   return {
-                    values: _extends$2(
+                    values: _extends(
                       Object.create(null),
                       values,
                       ((_extends2 = {}),
@@ -3591,7 +3568,7 @@
             var values = _ref2.values,
               prevProps = _ref2.prevProps
             var nextState = {
-              values: _extends$2(Object.create(null), values),
+              values: _extends(Object.create(null), values),
               prevProps: {},
             }
             controlledProps.forEach(function (key) {
@@ -3617,7 +3594,7 @@
 
           var _this$props2 = this.props,
             innerRef = _this$props2.innerRef,
-            props = _objectWithoutPropertiesLoose$1(_this$props2, ['innerRef'])
+            props = _objectWithoutPropertiesLoose(_this$props2, ['innerRef'])
 
           PROPS_TO_OMIT.forEach(function (prop) {
             delete props[prop]
@@ -3632,7 +3609,7 @@
           })
           return React.createElement(
             Component,
-            _extends$2({}, props, newProps, this.handlers, {
+            _extends({}, props, newProps, this.handlers, {
               ref: innerRef || this.attachRef,
             })
           )
@@ -3643,7 +3620,7 @@
 
     polyfill(UncontrolledComponent)
     UncontrolledComponent.displayName = 'Uncontrolled(' + displayName + ')'
-    UncontrolledComponent.propTypes = _extends$2(
+    UncontrolledComponent.propTypes = _extends(
       {
         innerRef: function innerRef() {},
       },
@@ -3662,7 +3639,7 @@
       WrappedComponent = React.forwardRef(function (props, ref) {
         return React.createElement(
           UncontrolledComponent,
-          _extends$2({}, props, {
+          _extends({}, props, {
             innerRef: ref,
             __source: {
               fileName: _jsxFileName,
@@ -3692,7 +3669,7 @@
 
       return uncontrollable(
         newComponent,
-        _extends$2({}, controlledValues, additions),
+        _extends({}, controlledValues, additions),
         nextMethods
       )
     }
@@ -6526,23 +6503,6 @@
 
   var chunk_1 = chunk
 
-  function _extends$1() {
-    _extends$1 = Object.assign
-      ? Object.assign.bind()
-      : function (target) {
-          for (var i = 1; i < arguments.length; i++) {
-            var source = arguments[i]
-            for (var key in source) {
-              if (Object.prototype.hasOwnProperty.call(source, key)) {
-                target[key] = source[key]
-              }
-            }
-          }
-          return target
-        }
-    return _extends$1.apply(this, arguments)
-  }
-
   /**
    * Returns the owner document of a given element.
    *
@@ -6769,7 +6729,7 @@
     var marginTop = String(style(node, 'marginTop') || 0)
     var marginLeft = String(style(node, 'marginLeft') || 0) // Subtract parent offsets and node margins
 
-    return _extends$1({}, offset, {
+    return _extends({}, offset, {
       top: offset.top - parentOffset.top - (parseInt(marginTop, 10) || 0),
       left: offset.left - parentOffset.left - (parseInt(marginLeft, 10) || 0),
     })
@@ -6948,36 +6908,6 @@
       },
       [ref]
     )
-  }
-
-  function _objectWithoutPropertiesLoose(source, excluded) {
-    if (source == null) return {}
-    var target = {}
-    var sourceKeys = Object.keys(source)
-    var key, i
-    for (i = 0; i < sourceKeys.length; i++) {
-      key = sourceKeys[i]
-      if (excluded.indexOf(key) >= 0) continue
-      target[key] = source[key]
-    }
-    return target
-  }
-
-  function _extends() {
-    _extends = Object.assign
-      ? Object.assign.bind()
-      : function (target) {
-          for (var i = 1; i < arguments.length; i++) {
-            var source = arguments[i]
-            for (var key in source) {
-              if (Object.prototype.hasOwnProperty.call(source, key)) {
-                target[key] = source[key]
-              }
-            }
-          }
-          return target
-        }
-    return _extends.apply(this, arguments)
   }
 
   /**
@@ -42455,12 +42385,12 @@
     'slotEnd',
   ]
   var EventCell = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(EventCell, _React$Component)
     function EventCell() {
       _classCallCheck(this, EventCell)
       return _callSuper(this, EventCell, arguments)
     }
-    _createClass(EventCell, [
+    _inherits(EventCell, _React$Component)
+    return _createClass(EventCell, [
       {
         key: 'render',
         value: function render() {
@@ -42549,7 +42479,6 @@
         },
       },
     ])
-    return EventCell
   })(React.Component)
 
   /**
@@ -45191,6 +45120,8 @@
         validContainers =
           _ref3$validContainers === void 0 ? [] : _ref3$validContainers
       _classCallCheck(this, Selection)
+      this._initialEvent = null
+      this.selecting = false
       this.isDetached = false
       this.container = node
       this.globalMouse = !node || global
@@ -45227,7 +45158,7 @@
       )
       this._addInitialEventListener()
     }
-    _createClass(Selection, [
+    return _createClass(Selection, [
       {
         key: 'on',
         value: function on(type, handler) {
@@ -45264,6 +45195,11 @@
       {
         key: 'teardown',
         value: function teardown() {
+          this._initialEvent = null
+          this._initialEventData = null
+          this._selectRect = null
+          this.selecting = false
+          this._lastClickData = null
           this.isDetached = true
           this._listeners = Object.create(null)
           this._removeTouchMoveWindowListener &&
@@ -45421,6 +45357,7 @@
       {
         key: '_handleInitialEvent',
         value: function _handleInitialEvent(e) {
+          this._initialEvent = e
           if (this.isDetached) {
             return
           }
@@ -45520,38 +45457,42 @@
       {
         key: '_handleTerminatingEvent',
         value: function _handleTerminatingEvent(e) {
-          var _getEventCoordinates4 = getEventCoordinates(e),
-            pageX = _getEventCoordinates4.pageX,
-            pageY = _getEventCoordinates4.pageY
+          var selecting = this.selecting
+          var bounds = this._selectRect
+          // If it's not in selecting state, it's a click event
+          if (!selecting && e.type.includes('key')) {
+            e = this._initialEvent
+          }
           this.selecting = false
           this._removeEndListener && this._removeEndListener()
           this._removeMoveListener && this._removeMoveListener()
-          if (!this._initialEventData) return
+          this._selectRect = null
+          this._initialEvent = null
+          this._initialEventData = null
+          this._lastClickData = null
+          if (!e) return
           var inRoot = !this.container || contains$1(this.container(), e.target)
           var isWithinValidContainer = this._isWithinValidContainer(e)
-          var bounds = this._selectRect
-          var click = this.isClick(pageX, pageY)
-          this._initialEventData = null
           if (e.key === 'Escape' || !isWithinValidContainer) {
             return this.emit('reset')
           }
-          if (click && inRoot) {
+          if (!selecting && inRoot) {
             return this._handleClickEvent(e)
           }
 
           // User drag-clicked in the Selectable area
-          if (!click) return this.emit('select', bounds)
+          if (selecting) return this.emit('select', bounds)
           return this.emit('reset')
         },
       },
       {
         key: '_handleClickEvent',
         value: function _handleClickEvent(e) {
-          var _getEventCoordinates5 = getEventCoordinates(e),
-            pageX = _getEventCoordinates5.pageX,
-            pageY = _getEventCoordinates5.pageY,
-            clientX = _getEventCoordinates5.clientX,
-            clientY = _getEventCoordinates5.clientY
+          var _getEventCoordinates4 = getEventCoordinates(e),
+            pageX = _getEventCoordinates4.pageX,
+            pageY = _getEventCoordinates4.pageY,
+            clientX = _getEventCoordinates4.clientX,
+            clientY = _getEventCoordinates4.clientY
           var now = new Date().getTime()
           if (
             this._lastClickData &&
@@ -45588,34 +45529,35 @@
           var _this$_initialEventDa = this._initialEventData,
             x = _this$_initialEventDa.x,
             y = _this$_initialEventDa.y
-          var _getEventCoordinates6 = getEventCoordinates(e),
-            pageX = _getEventCoordinates6.pageX,
-            pageY = _getEventCoordinates6.pageY
+          var _getEventCoordinates5 = getEventCoordinates(e),
+            pageX = _getEventCoordinates5.pageX,
+            pageY = _getEventCoordinates5.pageY
           var w = Math.abs(x - pageX)
           var h = Math.abs(y - pageY)
           var left = Math.min(pageX, x),
             top = Math.min(pageY, y),
             old = this.selecting
-
+          var click = this.isClick(pageX, pageY)
           // Prevent emitting selectStart event until mouse is moved.
           // in Chrome on Windows, mouseMove event may be fired just after mouseDown event.
-          if (this.isClick(pageX, pageY) && !old && !(w || h)) {
+          if (click && !old && !(w || h)) {
             return
           }
-          this.selecting = true
-          this._selectRect = {
-            top: top,
-            left: left,
-            x: pageX,
-            y: pageY,
-            right: left + w,
-            bottom: top + h,
-          }
-          if (!old) {
+          if (!old && !click) {
             this.emit('selectStart', this._initialEventData)
           }
-          if (!this.isClick(pageX, pageY))
+          if (!click) {
+            this.selecting = true
+            this._selectRect = {
+              top: top,
+              left: left,
+              x: pageX,
+              y: pageY,
+              right: left + w,
+              bottom: top + h,
+            }
             this.emit('selecting', this._selectRect)
+          }
           e.preventDefault()
         },
       },
@@ -45640,7 +45582,6 @@
         },
       },
     ])
-    return Selection
   })()
   /**
    * Resolve the disance prop from either an Int or an Object
@@ -45722,7 +45663,6 @@
   }
 
   var BackgroundCells = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(BackgroundCells, _React$Component)
     function BackgroundCells(props, context) {
       var _this
       _classCallCheck(this, BackgroundCells)
@@ -45733,7 +45673,8 @@
       _this.containerRef = /*#__PURE__*/ reactExports.createRef()
       return _this
     }
-    _createClass(BackgroundCells, [
+    _inherits(BackgroundCells, _React$Component)
+    return _createClass(BackgroundCells, [
       {
         key: 'componentDidMount',
         value: function componentDidMount() {
@@ -45925,7 +45866,6 @@
         },
       },
     ])
-    return BackgroundCells
   })(React.Component)
 
   /* eslint-disable react/prop-types */
@@ -45999,12 +45939,12 @@
   }
 
   var EventRow = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(EventRow, _React$Component)
     function EventRow() {
       _classCallCheck(this, EventRow)
       return _callSuper(this, EventRow, arguments)
     }
-    _createClass(EventRow, [
+    _inherits(EventRow, _React$Component)
+    return _createClass(EventRow, [
       {
         key: 'render',
         value: function render() {
@@ -46039,7 +45979,6 @@
         },
       },
     ])
-    return EventRow
   })(React.Component)
   EventRow.defaultProps = _objectSpread2({}, EventRowMixin.defaultProps)
 
@@ -47166,12 +47105,12 @@
       })
   }
   var EventEndingRow = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(EventEndingRow, _React$Component)
     function EventEndingRow() {
       _classCallCheck(this, EventEndingRow)
       return _callSuper(this, EventEndingRow, arguments)
     }
-    _createClass(EventEndingRow, [
+    _inherits(EventEndingRow, _React$Component)
+    return _createClass(EventEndingRow, [
       {
         key: 'render',
         value: function render() {
@@ -47274,7 +47213,6 @@
         },
       },
     ])
-    return EventEndingRow
   })(React.Component)
   EventEndingRow.defaultProps = _objectSpread2({}, EventRowMixin.defaultProps)
 
@@ -65807,12 +65745,12 @@
   }
   var per = (1 / 7) * 100 + '%'
   var EventRowCustom = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(EventRowCustom, _React$Component)
     function EventRowCustom() {
       _classCallCheck(this, EventRowCustom)
       return _callSuper(this, EventRowCustom, arguments)
     }
-    _createClass(EventRowCustom, [
+    _inherits(EventRowCustom, _React$Component)
+    return _createClass(EventRowCustom, [
       {
         key: 'render',
         value: function render() {
@@ -65859,11 +65797,9 @@
         },
       },
     ])
-    return EventRowCustom
   })(React.Component)
 
   var DateContentRow = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(DateContentRow, _React$Component)
     function DateContentRow() {
       var _this
       _classCallCheck(this, DateContentRow)
@@ -65974,7 +65910,8 @@
       _this.slotMetrics = getSlotMetrics$1()
       return _this
     }
-    _createClass(DateContentRow, [
+    _inherits(DateContentRow, _React$Component)
+    return _createClass(DateContentRow, [
       {
         key: 'getRowLimit',
         value: function getRowLimit() {
@@ -66118,7 +66055,6 @@
         },
       },
     ])
-    return DateContentRow
   })(React.Component)
   DateContentRow.defaultProps = {
     minRows: 0,
@@ -66136,12 +66072,6 @@
       label
     )
   }
-  Header.propTypes =
-    'development' !== 'production'
-      ? {
-          label: propTypesExports.node,
-        }
-      : {}
 
   var DateHeader = function DateHeader(_ref) {
     var label = _ref.label,
@@ -66161,6 +66091,16 @@
       label
     )
   }
+  DateHeader.propTypes =
+    'development' !== 'production'
+      ? {
+          label: propTypesExports.node,
+          date: propTypesExports.instanceOf(Date),
+          drilldownView: propTypesExports.string,
+          onDrillDown: propTypesExports.func,
+          isOffRange: propTypesExports.bool,
+        }
+      : {}
 
   var _excluded$6 = ['date', 'className']
   var eventsForWeek = function eventsForWeek(
@@ -66175,7 +66115,6 @@
     })
   }
   var MonthView = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(MonthView, _React$Component)
     function MonthView() {
       var _this
       _classCallCheck(this, MonthView)
@@ -66365,7 +66304,8 @@
       _this._pendingSelection = []
       return _this
     }
-    _createClass(
+    _inherits(MonthView, _React$Component)
+    return _createClass(
       MonthView,
       [
         {
@@ -66587,7 +66527,6 @@
         },
       ]
     )
-    return MonthView
   })(React.Component)
   MonthView.range = function (date, _ref3) {
     var localizer = _ref3.localizer
@@ -67407,7 +67346,7 @@
     /**
      * The event's width without any overlap.
      */
-    _createClass(Event, [
+    return _createClass(Event, [
       {
         key: '_width',
         get: function get() {
@@ -67483,7 +67422,6 @@
         },
       },
     ])
-    return Event
   })()
   /**
    * Return true if event a and b is considered to be on the same row.
@@ -67732,12 +67670,12 @@
   }
 
   var TimeSlotGroup = /*#__PURE__*/ (function (_Component) {
-    _inherits(TimeSlotGroup, _Component)
     function TimeSlotGroup() {
       _classCallCheck(this, TimeSlotGroup)
       return _callSuper(this, TimeSlotGroup, arguments)
     }
-    _createClass(TimeSlotGroup, [
+    _inherits(TimeSlotGroup, _Component)
+    return _createClass(TimeSlotGroup, [
       {
         key: 'render',
         value: function render() {
@@ -67785,7 +67723,6 @@
         },
       },
     ])
-    return TimeSlotGroup
   })(reactExports.Component)
 
   function stringifyPercent(v) {
@@ -67923,7 +67860,6 @@
     _excluded2$1 = ['eventContainerWrapper']
   var slotMetrics
   var DayColumn = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(DayColumn, _React$Component)
     function DayColumn() {
       var _this
       _classCallCheck(this, DayColumn)
@@ -68208,7 +68144,8 @@
       _this.containerRef = /*#__PURE__*/ reactExports.createRef()
       return _this
     }
-    _createClass(
+    _inherits(DayColumn, _React$Component)
+    return _createClass(
       DayColumn,
       [
         {
@@ -68402,22 +68339,21 @@
                   })
                 )
               ),
-              selecting &&
-                /*#__PURE__*/ React.createElement(
-                  'div',
-                  {
-                    className: 'rbc-slot-selection',
-                    style: {
-                      top: top,
-                      height: height,
-                    },
+              /*#__PURE__*/ React.createElement(
+                'div',
+                {
+                  className: 'rbc-slot-selection',
+                  style: {
+                    top: top,
+                    height: height,
                   },
-                  /*#__PURE__*/ React.createElement(
-                    'span',
-                    null,
-                    localizer.format(selectDates, 'selectRangeFormat')
-                  )
-                ),
+                },
+                /*#__PURE__*/ React.createElement(
+                  'span',
+                  null,
+                  localizer.format(selectDates, 'selectRangeFormat')
+                )
+              ),
               isNow &&
                 this.intervalTriggered &&
                 /*#__PURE__*/ React.createElement('div', {
@@ -68442,7 +68378,6 @@
         },
       ]
     )
-    return DayColumn
   })(React.Component)
   DayColumn.defaultProps = {
     dragThroughEvents: true,
@@ -68593,7 +68528,6 @@
   }
 
   var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(TimeGridHeader, _React$Component)
     function TimeGridHeader() {
       var _this
       _classCallCheck(this, TimeGridHeader)
@@ -68611,7 +68545,8 @@
       }
       return _this
     }
-    _createClass(TimeGridHeader, [
+    _inherits(TimeGridHeader, _React$Component)
+    return _createClass(TimeGridHeader, [
       {
         key: 'renderHeaderCell',
         value: function renderHeaderCell(date, idx) {
@@ -68788,7 +68723,6 @@
         },
       },
     ])
-    return TimeGridHeader
   })(React.Component)
 
   /**
@@ -68843,7 +68777,6 @@
   }
 
   var TimeGrid = /*#__PURE__*/ (function (_Component) {
-    _inherits(TimeGrid, _Component)
     function TimeGrid(props) {
       var _this
       _classCallCheck(this, TimeGrid)
@@ -68970,7 +68903,8 @@
       _this.gutterRef = /*#__PURE__*/ reactExports.createRef()
       return _this
     }
-    _createClass(TimeGrid, [
+    _inherits(TimeGrid, _Component)
+    return _createClass(TimeGrid, [
       {
         key: 'getSnapshotBeforeUpdate',
         value: function getSnapshotBeforeUpdate() {
@@ -69323,7 +69257,6 @@
         },
       },
     ])
-    return TimeGrid
   })(reactExports.Component)
   TimeGrid.defaultProps = {
     step: 30,
@@ -69339,12 +69272,12 @@
     'enableAutoScroll',
   ]
   var Day = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(Day, _React$Component)
     function Day() {
       _classCallCheck(this, Day)
       return _callSuper(this, Day, arguments)
     }
-    _createClass(Day, [
+    _inherits(Day, _React$Component)
+    return _createClass(Day, [
       {
         key: 'render',
         value: function render() {
@@ -69393,7 +69326,6 @@
         },
       },
     ])
-    return Day
   })(React.Component)
   Day.range = function (date, _ref) {
     var localizer = _ref.localizer
@@ -69433,12 +69365,12 @@
     'enableAutoScroll',
   ]
   var Week = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(Week, _React$Component)
     function Week() {
       _classCallCheck(this, Week)
       return _callSuper(this, Week, arguments)
     }
-    _createClass(Week, [
+    _inherits(Week, _React$Component)
+    return _createClass(Week, [
       {
         key: 'render',
         value: function render() {
@@ -69485,7 +69417,6 @@
         },
       },
     ])
-    return Week
   })(React.Component)
   Week.defaultProps = TimeGrid.defaultProps
   Week.navigate = function (date, action, _ref) {
@@ -69537,12 +69468,12 @@
     })
   }
   var WorkWeek = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(WorkWeek, _React$Component)
     function WorkWeek() {
       _classCallCheck(this, WorkWeek)
       return _callSuper(this, WorkWeek, arguments)
     }
-    _createClass(WorkWeek, [
+    _inherits(WorkWeek, _React$Component)
+    return _createClass(WorkWeek, [
       {
         key: 'render',
         value: function render() {
@@ -69589,7 +69520,6 @@
         },
       },
     ])
-    return WorkWeek
   })(React.Component)
   WorkWeek.defaultProps = TimeGrid.defaultProps
   WorkWeek.range = workWeekRange
@@ -69944,7 +69874,6 @@
   }
 
   var Toolbar = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(Toolbar, _React$Component)
     function Toolbar() {
       var _this
       _classCallCheck(this, Toolbar)
@@ -69964,7 +69893,8 @@
       }
       return _this
     }
-    _createClass(Toolbar, [
+    _inherits(Toolbar, _React$Component)
+    return _createClass(Toolbar, [
       {
         key: 'render',
         value: function render() {
@@ -70048,7 +69978,6 @@
         },
       },
     ])
-    return Toolbar
   })(React.Component)
 
   /**
@@ -71516,7 +71445,6 @@
     return names.indexOf(view) !== -1
   }
   var Calendar = /*#__PURE__*/ (function (_React$Component) {
-    _inherits(Calendar, _React$Component)
     function Calendar() {
       var _this
       _classCallCheck(this, Calendar)
@@ -71671,7 +71599,8 @@
       }
       return _this
     }
-    _createClass(
+    _inherits(Calendar, _React$Component)
+    return _createClass(
       Calendar,
       [
         {
@@ -71861,7 +71790,6 @@
         },
       ]
     )
-    return Calendar
   })(React.Component)
   Calendar.defaultProps = {
     events: [],
