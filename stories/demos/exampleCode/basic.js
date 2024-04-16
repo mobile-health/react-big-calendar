@@ -13,6 +13,7 @@ import {
   RandomResourceEvents,
   ResourceMap,
 } from '../../resources/mock'
+import MonthCustomView from '../../../src/MonthCustomView'
 
 const mLocalizer = momentLocalizer(moment)
 
@@ -23,6 +24,14 @@ const ColoredDateCellWrapper = ({ children }) =>
     },
   })
 
+const views = {
+  month: MonthCustomView,
+  day: true,
+  week: true,
+  agenda: false,
+  work_week: false,
+}
+
 /**
  * We are defaulting the localizer here because we are using this same
  * example on the main 'About' page in Storybook
@@ -32,10 +41,9 @@ export default function Basic({
   showDemoLink = true,
   ...props
 }) {
-  const { defaultDate, views } = useMemo(
+  const { defaultDate } = useMemo(
     () => ({
       defaultDate: new Date(),
-      views: Object.keys(Views).map((k) => Views[k]),
     }),
     []
   )
@@ -52,6 +60,7 @@ export default function Basic({
           localizer={localizer}
           showMultiDayTimes
           step={60}
+          defaultView="month"
           views={views}
           resourceIdAccessor={'resourceId'}
           resourceTitleAccessor={'resourceTitle'}

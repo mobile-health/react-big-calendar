@@ -5,13 +5,13 @@ import qsa from 'dom-helpers/querySelectorAll'
 import PropTypes from 'prop-types'
 
 import BackgroundCells from './BackgroundCells'
-import EventRow from './EventRow'
 import EventEndingRow from './EventEndingRow'
 import NoopWrapper from './NoopWrapper'
 import ScrollableWeekWrapper from './ScrollableWeekWrapper'
 import * as DateSlotMetrics from './utils/DateSlotMetrics'
+import EventRowCustom from './EventRowCustom'
 
-class DateContentRow extends React.Component {
+class DateContentRowCustom extends React.Component {
   constructor(...args) {
     super(...args)
 
@@ -128,7 +128,7 @@ class DateContentRow extends React.Component {
     if (renderForMeasure) return this.renderDummy()
 
     let metrics = this.slotMetrics(this.props)
-    let { levels, extra } = metrics
+    let { extra } = metrics
 
     let ScrollableWeekComponent = showAllEvents
       ? ScrollableWeekWrapper
@@ -147,6 +147,7 @@ class DateContentRow extends React.Component {
       resourceId,
       slotMetrics: metrics,
       resizable,
+      range,
     }
 
     return (
@@ -186,9 +187,11 @@ class DateContentRow extends React.Component {
               {...eventRowProps}
               rtl={this.props.rtl}
             >
-              {levels.map((segs, idx) => (
-                <EventRow key={idx} segments={segs} {...eventRowProps} />
-              ))}
+              <EventRowCustom
+                events={extra}
+                range={range}
+                localizer={localizer}
+              />
               {!!extra.length && (
                 <EventEndingRow
                   segments={extra}
@@ -204,7 +207,7 @@ class DateContentRow extends React.Component {
   }
 }
 
-DateContentRow.propTypes = {
+DateContentRowCustom.propTypes = {
   date: PropTypes.instanceOf(Date),
   events: PropTypes.array.isRequired,
   range: PropTypes.array.isRequired,
@@ -242,9 +245,9 @@ DateContentRow.propTypes = {
   maxRows: PropTypes.number.isRequired,
 }
 
-DateContentRow.defaultProps = {
+DateContentRowCustom.defaultProps = {
   minRows: 0,
   maxRows: Infinity,
 }
 
-export default DateContentRow
+export default DateContentRowCustom
