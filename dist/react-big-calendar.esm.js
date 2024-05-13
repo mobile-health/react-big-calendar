@@ -1817,6 +1817,15 @@ var EventRow = /*#__PURE__*/ (function (_React$Component) {
   ])
   return EventRow
 })(React.Component)
+EventRow.propTypes =
+  process.env.NODE_ENV !== 'production'
+    ? _objectSpread(
+        {
+          segments: PropTypes.array,
+        },
+        EventRowMixin.propTypes
+      )
+    : {}
 EventRow.defaultProps = _objectSpread({}, EventRowMixin.defaultProps)
 
 function endOfRange(_ref) {
@@ -2433,6 +2442,12 @@ var Header = function Header(_ref) {
     label
   )
 }
+Header.propTypes =
+  process.env.NODE_ENV !== 'production'
+    ? {
+        label: PropTypes.node,
+      }
+    : {}
 
 var DateHeader = function DateHeader(_ref) {
   var label = _ref.label,
@@ -3461,6 +3476,16 @@ var TimeSlotGroup = /*#__PURE__*/ (function (_Component) {
   ])
   return TimeSlotGroup
 })(Component)
+TimeSlotGroup.propTypes =
+  process.env.NODE_ENV !== 'production'
+    ? {
+        renderSlot: PropTypes.func,
+        group: PropTypes.array.isRequired,
+        resource: PropTypes.any,
+        components: PropTypes.object,
+        getters: PropTypes.object,
+      }
+    : {}
 
 function stringifyPercent(v) {
   return typeof v === 'string' ? v : v + '%'

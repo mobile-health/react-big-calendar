@@ -66,6 +66,7 @@ export default function Basic({
           views={views}
           resourceIdAccessor={'resourceId'}
           resourceTitleAccessor={'resourceTitle'}
+          onSelectEvent={(event) => console.log(event)}
         />
       </div>
     </Fragment>

@@ -6,7 +6,7 @@ const eventGap = 4 // px
 const padding = 8
 
 const DayEvents = (props) => {
-  const { events } = props
+  const { events, onSelect } = props
   const [showAll, setShowAll] = useState(false)
   const [overflow, setOverflow] = useState(false)
   const [visibleNumber, setVisibleNumber] = useState(0)
@@ -66,6 +66,7 @@ const DayEvents = (props) => {
                   key={id}
                   style={{ width: eventWidth, background: color }}
                   title={name}
+                  onClick={() => onSelect(item)}
                 >
                   {title}
                 </div>
@@ -79,7 +80,7 @@ const DayEvents = (props) => {
 }
 
 const CustomWeekEvents = (props) => {
-  const { events, range, localizer } = props
+  const { events, range, localizer, onSelect } = props
 
   const refs = range.map((_item) => createRef())
 
@@ -96,7 +97,11 @@ const CustomWeekEvents = (props) => {
             ref={refs[dayIdx]}
             key={day.getTime()}
           >
-            <DayEvents parentRef={refs[dayIdx]} events={dayEvents} />
+            <DayEvents
+              parentRef={refs[dayIdx]}
+              events={dayEvents}
+              onSelect={onSelect}
+            />
           </div>
         )
       })}

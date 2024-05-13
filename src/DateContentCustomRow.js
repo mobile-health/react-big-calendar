@@ -95,6 +95,7 @@ class DateContentCustomRow extends React.Component {
       getNow,
       renderHeader,
       localizer,
+      onSelect,
       onSelectStart,
       onSelectEnd,
       resourceId,
@@ -140,6 +141,7 @@ class DateContentCustomRow extends React.Component {
             events={events}
             range={range}
             localizer={localizer}
+            onSelect={onSelect}
           />
         </div>
       </div>
