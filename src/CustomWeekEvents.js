@@ -7,11 +7,12 @@ const padding = 8
 
 const DayEvents = (props) => {
   const { events } = props
+  const [showAll, setShowAll] = useState(false)
   const [overflow, setOverflow] = useState(false)
   const [visibleNumber, setVisibleNumber] = useState(0)
 
   const updateSizing = useCallback(() => {
-    if (events.length) {
+    if (events.length && !showAll) {
       const length = events.length
       const parentWidth = props.parentRef.current.offsetWidth
       const paddingWidth = padding * 2
@@ -25,10 +26,14 @@ const DayEvents = (props) => {
       const number = Math.floor((parentWidth - 12) / 26)
       setVisibleNumber(number)
     }
-  }, [events, props.parentRef])
+  }, [events, props.parentRef, showAll])
 
   useEffect(() => {
     updateSizing()
+
+    window.addEventListener('resize', updateSizing)
+
+    return () => window.removeEventListener('resize', updateSizing)
   }, [updateSizing])
 
   if (events.length == 0) return null
@@ -38,7 +43,10 @@ const DayEvents = (props) => {
       {overflow && visibleNumber < events.length && (
         <div
           className="custom-show-more"
-          onClick={() => setVisibleNumber(events.length)}
+          onClick={() => {
+            setVisibleNumber(events.length)
+            setShowAll(true)
+          }}
         >
           +{events.length - visibleNumber} more
         </div>
@@ -47,22 +55,23 @@ const DayEvents = (props) => {
         className="rbc-custom-week-day-events"
         style={{ padding, gap: eventGap }}
       >
-        {visibleNumber > 0 &&
+        {(visibleNumber > 0 || showAll) &&
           events.map((item, idx) => {
             const { title, name, id, color } = item
 
-            if (idx >= visibleNumber) return null
+            if (idx < visibleNumber || showAll)
+              return (
+                <div
+                  className="rbc-custom-week-day-event"
+                  key={id}
+                  style={{ width: eventWidth, background: color }}
+                  title={name}
+                >
+                  {title}
+                </div>
+              )
 
-            return (
-              <div
-                className="rbc-custom-week-day-event"
-                key={id}
-                style={{ width: eventWidth, background: color }}
-                title={name}
-              >
-                {title}
-              </div>
-            )
+            return null
           })}
       </div>
     </>
