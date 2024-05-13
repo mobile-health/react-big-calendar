@@ -47,21 +47,22 @@ const DayEvents = (props) => {
         className="rbc-custom-week-day-events"
         style={{ padding, gap: eventGap }}
       >
-        {Array.from(Array(visibleNumber).keys()).map((idx) => {
-          const event = events[idx]
+        {visibleNumber > 0 &&
+          Array.from(Array(visibleNumber).keys()).map((idx) => {
+            const event = events[idx]
 
-          const { title, color, name, id } = event
-          return (
-            <div
-              className="rbc-custom-week-day-event"
-              key={id}
-              style={{ width: eventWidth, background: color }}
-              title={name}
-            >
-              {title}
-            </div>
-          )
-        })}
+            const { title, color, name, id } = event
+            return (
+              <div
+                className="rbc-custom-week-day-event"
+                key={id}
+                style={{ width: eventWidth, background: color }}
+                title={name}
+              >
+                {title}
+              </div>
+            )
+          })}
       </div>
     </>
   )
