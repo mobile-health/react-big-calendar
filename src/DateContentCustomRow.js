@@ -1,17 +1,13 @@
 import React, { createRef } from 'react'
 import clsx from 'clsx'
-import getHeight from 'dom-helpers/height'
 import qsa from 'dom-helpers/querySelectorAll'
 import PropTypes from 'prop-types'
 
 import BackgroundCells from './BackgroundCells'
-import EventEndingRow from './EventEndingRow'
-import NoopWrapper from './NoopWrapper'
-import ScrollableWeekWrapper from './ScrollableWeekWrapper'
 import * as DateSlotMetrics from './utils/DateSlotMetrics'
-import EventRowCustom from './EventRowCustom'
+import CustomWeekEvents from './CustomWeekEvents'
 
-class DateContentRowCustom extends React.Component {
+class DateContentCustomRow extends React.Component {
   constructor(...args) {
     super(...args)
 
@@ -43,17 +39,6 @@ class DateContentRowCustom extends React.Component {
   getContainer = () => {
     const { container } = this.props
     return container ? container() : this.containerRef.current
-  }
-
-  getRowLimit() {
-    /* Guessing this only gets called on the dummyRow */
-    const eventHeight = getHeight(this.eventRowRef.current)
-    const headingHeight = this.headingRowRef?.current
-      ? getHeight(this.headingRowRef.current)
-      : 0
-    const eventSpace = getHeight(this.containerRef.current) - headingHeight
-
-    return Math.max(Math.floor(eventSpace / eventHeight), 1)
   }
 
   renderHeadingCell = (date, index) => {
@@ -102,53 +87,21 @@ class DateContentRowCustom extends React.Component {
       rtl,
       range,
       className,
-      selected,
       selectable,
-      renderForMeasure,
 
-      accessors,
       getters,
       components,
 
       getNow,
       renderHeader,
-      onSelect,
       localizer,
       onSelectStart,
       onSelectEnd,
-      onDoubleClick,
-      onKeyPress,
       resourceId,
       longPressThreshold,
-      isAllDay,
-      resizable,
       showAllEvents,
+      events,
     } = this.props
-
-    if (renderForMeasure) return this.renderDummy()
-
-    let metrics = this.slotMetrics(this.props)
-    let { extra } = metrics
-
-    let ScrollableWeekComponent = showAllEvents
-      ? ScrollableWeekWrapper
-      : NoopWrapper
-    let WeekWrapper = components.weekWrapper
-
-    const eventRowProps = {
-      selected,
-      accessors,
-      getters,
-      localizer,
-      components,
-      onSelect,
-      onDoubleClick,
-      onKeyPress,
-      resourceId,
-      slotMetrics: metrics,
-      resizable,
-      range,
-    }
 
     return (
       <div className={className} role="rowgroup" ref={this.containerRef}>
@@ -181,33 +134,20 @@ class DateContentRowCustom extends React.Component {
               {range.map(this.renderHeadingCell)}
             </div>
           )}
-          <ScrollableWeekComponent>
-            <WeekWrapper
-              isAllDay={isAllDay}
-              {...eventRowProps}
-              rtl={this.props.rtl}
-            >
-              <EventRowCustom
-                events={extra}
-                range={range}
-                localizer={localizer}
-              />
-              {!!extra.length && (
-                <EventEndingRow
-                  segments={extra}
-                  onShowMore={this.handleShowMore}
-                  {...eventRowProps}
-                />
-              )}
-            </WeekWrapper>
-          </ScrollableWeekComponent>
+
+          {/* Render events here */}
+          <CustomWeekEvents
+            events={events}
+            range={range}
+            localizer={localizer}
+          />
         </div>
       </div>
     )
   }
 }
 
-DateContentRowCustom.propTypes = {
+DateContentCustomRow.propTypes = {
   date: PropTypes.instanceOf(Date),
   events: PropTypes.array.isRequired,
   range: PropTypes.array.isRequired,
@@ -215,7 +155,6 @@ DateContentRowCustom.propTypes = {
   rtl: PropTypes.bool,
   resizable: PropTypes.bool,
   resourceId: PropTypes.any,
-  renderForMeasure: PropTypes.bool,
   renderHeader: PropTypes.func,
 
   container: PropTypes.func,
@@ -242,12 +181,10 @@ DateContentRowCustom.propTypes = {
   localizer: PropTypes.object.isRequired,
 
   minRows: PropTypes.number.isRequired,
-  maxRows: PropTypes.number.isRequired,
 }
 
-DateContentRowCustom.defaultProps = {
+DateContentCustomRow.defaultProps = {
   minRows: 0,
-  maxRows: Infinity,
 }
 
-export default DateContentRowCustom
+export default DateContentCustomRow

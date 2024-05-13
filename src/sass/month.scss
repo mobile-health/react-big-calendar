@@ -124,3 +124,38 @@
   margin: -10px -10px 5px -10px;
   padding: 2px 10px;
 }
+
+.rbc-custom-week-events {
+  display: flex;
+  flex-direction: row;
+}
+
+.rbc-custom-week-day-events {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start;
+  flex-wrap: wrap-reverse;
+}
+
+.rbc-custom-week-day-event {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  text-align: center;
+  border-radius: 24px;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.custom-show-more {
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+  color: #6A7882;
+  font-size: 14px;
+  font-weight: 400;
+}

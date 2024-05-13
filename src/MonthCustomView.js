@@ -12,7 +12,7 @@ import * as animationFrame from 'dom-helpers/animationFrame'
 /* import Popup from './Popup'
 import Overlay from 'react-overlays/Overlay' */
 import PopOverlay from './PopOverlay'
-import DateContentRowCustom from './DateContentRowCustom'
+import DateContentCustomRow from './DateContentCustomRow'
 import Header from './Header'
 import DateHeader from './DateHeader'
 
@@ -26,8 +26,6 @@ class MonthCustomView extends React.Component {
     super(...args)
 
     this.state = {
-      rowLimit: 5,
-      needLimitMeasure: true,
       date: null,
     }
     this.containerRef = createRef()
@@ -37,17 +35,14 @@ class MonthCustomView extends React.Component {
     this._pendingSelection = []
   }
 
-  static getDerivedStateFromProps({ date, localizer }, state) {
+  static getDerivedStateFromProps({ date }) {
     return {
       date,
-      needLimitMeasure: localizer.neq(date, state.date, 'month'),
     }
   }
 
   componentDidMount() {
     let running
-
-    if (this.state.needLimitMeasure) this.measureRowLimit(this.props)
 
     window.addEventListener(
       'resize',
@@ -55,7 +50,6 @@ class MonthCustomView extends React.Component {
         if (!running) {
           animationFrame.request(() => {
             running = false
-            this.setState({ needLimitMeasure: true }) //eslint-disable-line
           })
         }
       }),
@@ -63,9 +57,7 @@ class MonthCustomView extends React.Component {
     )
   }
 
-  componentDidUpdate() {
-    if (this.state.needLimitMeasure) this.measureRowLimit(this.props)
-  }
+  componentDidUpdate() {}
 
   componentWillUnmount() {
     window.removeEventListener('resize', this._resizeListener, false)
@@ -113,8 +105,6 @@ class MonthCustomView extends React.Component {
       showAllEvents,
     } = this.props
 
-    const { needLimitMeasure, rowLimit } = this.state
-
     // let's not mutate props
     const weeksEvents = eventsForWeek(
       [...events],
@@ -127,7 +117,7 @@ class MonthCustomView extends React.Component {
     const sorted = sortWeekEvents(weeksEvents, accessors, localizer)
 
     return (
-      <DateContentRowCustom
+      <DateContentCustomRow
         key={weekIdx}
         ref={weekIdx === 0 ? this.slotRowRef : undefined}
         container={this.getContainer}
@@ -136,7 +126,6 @@ class MonthCustomView extends React.Component {
         date={date}
         range={week}
         events={sorted}
-        maxRows={showAllEvents ? Infinity : rowLimit}
         selected={selected}
         selectable={selectable}
         components={components}
@@ -144,7 +133,6 @@ class MonthCustomView extends React.Component {
         getters={getters}
         localizer={localizer}
         renderHeader={this.readerDateHeading}
-        renderForMeasure={needLimitMeasure}
         onShowMore={this.handleShowMore}
         onSelect={this.handleSelectEvent}
         onDoubleClick={this.handleDoubleClickEvent}
@@ -237,44 +225,6 @@ class MonthCustomView extends React.Component {
         onHide={onHide}
       />
     )
-
-    /* return (
-      <Overlay
-        rootClose
-        placement="bottom"
-        show={!!overlay.position}
-        onHide={() => this.setState({ overlay: null })}
-        target={() => overlay.target}
-      >
-        {({ props }) => (
-          <Popup
-            {...props}
-            popupOffset={popupOffset}
-            accessors={accessors}
-            getters={getters}
-            selected={selected}
-            components={components}
-            localizer={localizer}
-            position={overlay.position}
-            show={this.overlayDisplay}
-            events={overlay.events}
-            slotStart={overlay.date}
-            slotEnd={overlay.end}
-            onSelect={this.handleSelectEvent}
-            onDoubleClick={this.handleDoubleClickEvent}
-            onKeyPress={this.handleKeyPressEvent}
-            handleDragStart={this.props.handleDragStart}
-          />
-        )}
-      </Overlay>
-    ) */
-  }
-
-  measureRowLimit() {
-    this.setState({
-      needLimitMeasure: false,
-      rowLimit: this.slotRowRef.current.getRowLimit(),
-    })
   }
 
   handleSelectSlot = (range, slotInfo) => {

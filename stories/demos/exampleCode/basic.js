@@ -10,9 +10,11 @@ import {
 import DemoLink from '../../DemoLink.component'
 import {
   BackgroundEvents,
+  MonthEvents,
   RandomResourceEvents,
   ResourceMap,
 } from '../../resources/mock'
+
 import MonthCustomView from '../../../src/MonthCustomView'
 
 const mLocalizer = momentLocalizer(moment)
@@ -54,9 +56,9 @@ export default function Basic({
       <div className="height600" {...props}>
         <Calendar
           defaultDate={defaultDate}
-          events={RandomResourceEvents}
-          backgroundEvents={BackgroundEvents}
-          resources={ResourceMap}
+          events={MonthEvents}
+          backgroundEvents={[]}
+          resources={[]}
           localizer={localizer}
           showMultiDayTimes
           step={60}
