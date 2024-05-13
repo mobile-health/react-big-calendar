@@ -128,6 +128,13 @@
 .rbc-custom-week-events {
   display: flex;
   flex-direction: row;
+  flex: 1 0 0;
+}
+
+.rbc-custom-week-day-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
 }
 
 .rbc-custom-week-day-events {

@@ -90,6 +90,9 @@
   user-select: none;
   -webkit-user-select: none;
   z-index: 4;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .rbc-row-content-scrollable {

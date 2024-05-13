@@ -91,6 +91,7 @@ const CustomWeekEvents = (props) => {
           []
         return (
           <div
+            className="rbc-custom-week-day-wrapper"
             style={{ WebkitFlexBasis: per, flexBasis: per, maxWidth: per }}
             ref={refs[dayIdx]}
             key={day.getTime()}
