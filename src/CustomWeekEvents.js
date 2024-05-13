@@ -49,9 +49,10 @@ const DayEvents = (props) => {
       >
         {visibleNumber > 0 &&
           Array.from(Array(visibleNumber).keys()).map((idx) => {
-            const event = events[idx]
-
-            const { title, color, name, id } = event
+            const title = events[idx].title
+            const color = events[idx].color
+            const name = events[idx].name
+            const id = events[idx].id
             return (
               <div
                 className="rbc-custom-week-day-event"
