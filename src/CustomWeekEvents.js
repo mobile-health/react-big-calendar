@@ -48,11 +48,11 @@ const DayEvents = (props) => {
         style={{ padding, gap: eventGap }}
       >
         {visibleNumber > 0 &&
-          Array.from(Array(visibleNumber).keys()).map((idx) => {
-            const title = events[idx].title
-            const color = events[idx].color
-            const name = events[idx].name
-            const id = events[idx].id
+          events.map((item, idx) => {
+            const { title, name, id, color } = item
+
+            if (idx >= visibleNumber) return null
+
             return (
               <div
                 className="rbc-custom-week-day-event"
