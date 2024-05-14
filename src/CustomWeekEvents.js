@@ -1,3 +1,4 @@
+import { debounce } from 'lodash'
 import React, { createRef, useCallback, useEffect, useState } from 'react'
 
 const per = (1 / 7) * 100 + '%'
@@ -31,9 +32,11 @@ const DayEvents = (props) => {
   useEffect(() => {
     updateSizing()
 
-    window.addEventListener('resize', updateSizing)
+    const debounceUpdate = debounce(updateSizing, 200)
 
-    return () => window.removeEventListener('resize', updateSizing)
+    window.addEventListener('resize', debounceUpdate)
+
+    return () => window.removeEventListener('resize', debounceUpdate)
   }, [updateSizing])
 
   if (events.length == 0) return null
