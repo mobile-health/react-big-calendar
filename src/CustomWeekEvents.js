@@ -1,5 +1,11 @@
 import { debounce } from 'lodash'
-import React, { createRef, useCallback, useEffect, useState } from 'react'
+import React, {
+  createRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 const per = (1 / 7) * 100 + '%'
 const eventWidth = 22 // px
@@ -7,7 +13,7 @@ const eventGap = 4 // px
 const padding = 8
 
 const DayEvents = (props) => {
-  const { events, onSelect } = props
+  const { events = [], onSelect } = props
   const [showAll, setShowAll] = useState(false)
   const [overflow, setOverflow] = useState(false)
   const [visibleNumber, setVisibleNumber] = useState(0)
@@ -25,17 +31,24 @@ const DayEvents = (props) => {
       setOverflow(isOverflow)
 
       const number = Math.trunc((parentWidth - 12) / 26)
-      console.log('================')
-      console.log('parent: ', props.parentRef.current)
-      console.log('parentWidth: ', parentWidth)
-      console.log(
-        'num of children: Math.trunc((parentWidth - 12) / 26) = ',
-        number
-      )
-      console.log('================')
+      // console.log('================')
+      // console.log('parent: ', props.parentRef.current)
+      // console.log('parentWidth: ', parentWidth)
+      // console.log(
+      //   'num of children: Math.trunc((parentWidth - 12) / 26) = ',
+      //   number
+      // )
+      // console.log('================')
       setVisibleNumber(number)
     }
   }, [events, props.parentRef, showAll])
+
+  const visibleEvents = useMemo(() => {
+    if (showAll) return events
+    if (visibleNumber) return events.slice(0, visibleNumber)
+
+    return []
+  }, [showAll, events, visibleNumber])
 
   useEffect(() => {
     updateSizing()
@@ -66,25 +79,21 @@ const DayEvents = (props) => {
         className="rbc-custom-week-day-events"
         style={{ padding, gap: eventGap }}
       >
-        {(visibleNumber > 0 || showAll) &&
-          events.map((item, idx) => {
-            const { title, name, id, color } = item
+        {visibleEvents.map((item, idx) => {
+          const { title, name, id, color } = item
 
-            if (idx < visibleNumber || showAll)
-              return (
-                <div
-                  className="rbc-custom-week-day-event"
-                  key={id}
-                  style={{ width: eventWidth, background: color }}
-                  title={name}
-                  onClick={() => onSelect(item)}
-                >
-                  {title}
-                </div>
-              )
-
-            return null
-          })}
+          return (
+            <div
+              className="rbc-custom-week-day-event"
+              key={id + idx}
+              style={{ width: eventWidth, background: color }}
+              title={name}
+              onClick={() => onSelect(item)}
+            >
+              {title}
+            </div>
+          )
+        })}
       </div>
     </>
   )
