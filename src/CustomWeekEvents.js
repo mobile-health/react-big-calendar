@@ -15,7 +15,7 @@ const DayEvents = (props) => {
   const updateSizing = useCallback(() => {
     if (events.length && !showAll) {
       const length = events.length
-      const parentWidth = props.parentRef.current.offsetWidth
+      const parentWidth = Math.trunc(props.parentRef.current.offsetWidth)
       const paddingWidth = padding * 2
       const totalGapMax = eventGap * (length - 1)
 
@@ -24,7 +24,15 @@ const DayEvents = (props) => {
         parentWidth
       setOverflow(isOverflow)
 
-      const number = Math.floor((parentWidth - 12) / 26)
+      const number = Math.trunc((parentWidth - 12) / 26)
+      console.log('================')
+      console.log('parent: ', props.parentRef.current)
+      console.log('parentWidth: ', parentWidth)
+      console.log(
+        'num of children: Math.trunc((parentWidth - 12) / 26) = ',
+        number
+      )
+      console.log('================')
       setVisibleNumber(number)
     }
   }, [events, props.parentRef, showAll])
