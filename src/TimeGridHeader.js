@@ -129,6 +129,7 @@ class TimeGridHeader extends React.Component {
                       style={{ borderBottom: 'none' }}
                     >
                       <ResourceHeaderComponent
+                        dateIdx={dateIdx}
                         index={resourceIdx}
                         label={accessors.resourceTitle(resource)}
                         resource={resource}
