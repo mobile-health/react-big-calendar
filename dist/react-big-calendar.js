@@ -46053,6 +46053,15 @@
     ])
     return EventRow
   })(React.Component)
+  EventRow.propTypes =
+    'development' !== 'production'
+      ? _objectSpread2(
+          {
+            segments: propTypesExports.array,
+          },
+          EventRowMixin.propTypes
+        )
+      : {}
   EventRow.defaultProps = _objectSpread2({}, EventRowMixin.defaultProps)
 
   /**
@@ -47708,6 +47717,12 @@
       label
     )
   }
+  Header.propTypes =
+    'development' !== 'production'
+      ? {
+          label: propTypesExports.node,
+        }
+      : {}
 
   var DateHeader = function DateHeader(_ref) {
     var label = _ref.label,
@@ -47727,6 +47742,16 @@
       label
     )
   }
+  DateHeader.propTypes =
+    'development' !== 'production'
+      ? {
+          label: propTypesExports.node,
+          date: propTypesExports.instanceOf(Date),
+          drilldownView: propTypesExports.string,
+          onDrillDown: propTypesExports.func,
+          isOffRange: propTypesExports.bool,
+        }
+      : {}
 
   var _excluded$6 = ['date', 'className']
   var eventsForWeek = function eventsForWeek(
@@ -50157,14 +50182,6 @@
     var label = _ref.label
     return /*#__PURE__*/ React.createElement(React.Fragment, null, label)
   }
-  ResourceHeader.propTypes =
-    'development' !== 'production'
-      ? {
-          label: propTypesExports.node,
-          index: propTypesExports.number,
-          resource: propTypesExports.object,
-        }
-      : {}
 
   var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
     _inherits(TimeGridHeader, _React$Component)
