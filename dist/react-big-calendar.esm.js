@@ -2452,6 +2452,16 @@ var DateHeader = function DateHeader(_ref) {
     label
   )
 }
+DateHeader.propTypes =
+  process.env.NODE_ENV !== 'production'
+    ? {
+        label: PropTypes.node,
+        date: PropTypes.instanceOf(Date),
+        drilldownView: PropTypes.string,
+        onDrillDown: PropTypes.func,
+        isOffRange: PropTypes.bool,
+      }
+    : {}
 
 var _excluded$6 = ['date', 'className']
 var eventsForWeek = function eventsForWeek(
@@ -3635,6 +3645,7 @@ var DayColumn = /*#__PURE__*/ (function (_React$Component) {
         dayLayoutAlgorithm: dayLayoutAlgorithm,
       })
       return styledEvents.map(function (_ref2, idx) {
+        var _event$label
         var event = _ref2.event,
           style = _ref2.style
         var end = accessors.end(event)
@@ -3654,6 +3665,10 @@ var DayColumn = /*#__PURE__*/ (function (_React$Component) {
             },
             format
           )
+        label =
+          (_event$label = event.label) !== null && _event$label !== void 0
+            ? _event$label
+            : label
         var continuesPrior = startsBeforeDay || slotMetrics.startsBefore(start)
         var continuesAfter = startsAfterDay || slotMetrics.startsAfter(end)
         return /*#__PURE__*/ React.createElement(TimeGridEvent, {
@@ -4247,6 +4262,14 @@ var ResourceHeader = function ResourceHeader(_ref) {
   var label = _ref.label
   return /*#__PURE__*/ React.createElement(React.Fragment, null, label)
 }
+ResourceHeader.propTypes =
+  process.env.NODE_ENV !== 'production'
+    ? {
+        label: PropTypes.node,
+        index: PropTypes.number,
+        resource: PropTypes.object,
+      }
+    : {}
 
 var TimeGridHeader = /*#__PURE__*/ (function (_React$Component) {
   _inherits(TimeGridHeader, _React$Component)

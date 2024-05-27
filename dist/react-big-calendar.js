@@ -46053,15 +46053,6 @@
     ])
     return EventRow
   })(React.Component)
-  EventRow.propTypes =
-    'development' !== 'production'
-      ? _objectSpread2(
-          {
-            segments: propTypesExports.array,
-          },
-          EventRowMixin.propTypes
-        )
-      : {}
   EventRow.defaultProps = _objectSpread2({}, EventRowMixin.defaultProps)
 
   /**
@@ -47717,12 +47708,6 @@
       label
     )
   }
-  Header.propTypes =
-    'development' !== 'production'
-      ? {
-          label: propTypesExports.node,
-        }
-      : {}
 
   var DateHeader = function DateHeader(_ref) {
     var label = _ref.label,
@@ -47742,16 +47727,6 @@
       label
     )
   }
-  DateHeader.propTypes =
-    'development' !== 'production'
-      ? {
-          label: propTypesExports.node,
-          date: propTypesExports.instanceOf(Date),
-          drilldownView: propTypesExports.string,
-          onDrillDown: propTypesExports.func,
-          isOffRange: propTypesExports.bool,
-        }
-      : {}
 
   var _excluded$6 = ['date', 'className']
   var eventsForWeek = function eventsForWeek(
@@ -49566,6 +49541,7 @@
           dayLayoutAlgorithm: dayLayoutAlgorithm,
         })
         return styledEvents.map(function (_ref2, idx) {
+          var _event$label
           var event = _ref2.event,
             style = _ref2.style
           var end = accessors.end(event)
@@ -49585,6 +49561,10 @@
               },
               format
             )
+          label =
+            (_event$label = event.label) !== null && _event$label !== void 0
+              ? _event$label
+              : label
           var continuesPrior =
             startsBeforeDay || slotMetrics.startsBefore(start)
           var continuesAfter = startsAfterDay || slotMetrics.startsAfter(end)

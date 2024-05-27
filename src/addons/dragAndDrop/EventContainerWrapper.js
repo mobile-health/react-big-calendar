@@ -274,6 +274,8 @@ class EventContainerWrapper extends React.Component {
     if (startsBeforeDay && startsAfterDay) label = localizer.messages.allDay
     else label = localizer.format({ start, end }, format)
 
+    label = event.label ?? label
+
     return React.cloneElement(children, {
       children: (
         <React.Fragment>
