@@ -1,5 +1,11 @@
 # react-big-calendar
 
+## 1.12.6
+
+### Patch Changes
+
+- [`10b91daea356b4d1a846112144af6cc6007bd87b`](https://github.com/mobile-health/react-big-calendar/commit/10b91daea356b4d1a846112144af6cc6007bd87b) Thanks [@fs-nathan](https://github.com/fs-nathan)! - update action
+
 ## 1.12.5
 
 ### Patch Changes
