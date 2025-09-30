@@ -27,12 +27,17 @@ jobs:
       - name: Install
         run: yarn install --frozen-lockfile
 
+      - name: Configure git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
       - name: Create Version PR / Tag
         id: changesets
         uses: changesets/action@v1
         with:
           title: Version Packages
           commit: "ci: version packages"
-          publish: "node .github/scripts/tag-version.cjs"
+          publish: "node .github/scripts/tag-with-build.cjs"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
