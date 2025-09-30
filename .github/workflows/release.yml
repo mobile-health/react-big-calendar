@@ -31,7 +31,7 @@ jobs:
         run: yarn build
 
       - name: Read Version
-        run: node -e "const v=require('./package.json').version; require('fs').appendFileSync(process.env.GITHUB_ENV, `VERSION=${v}\n`)"
+        run: node -e "const v=require('./package.json').version; require('fs').appendFileSync(process.env.GITHUB_ENV, 'VERSION='+v+'\\n')"
 
       - name: Create artifacts
         shell: bash
