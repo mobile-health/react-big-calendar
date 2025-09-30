@@ -12,8 +12,14 @@ function inGitRepo() {
 }
 
 try {
-  // Install husky only when developing in the repo (has .git) and not in CI
-  if (inGitRepo() && !process.env.CI) {
+  // In CI, do nothing (avoid changing working tree)
+  if (process.env.CI) {
+    console.log('[prepare] CI detected; skipping');
+    process.exit(0);
+  }
+
+  // Install husky only when developing in the repo (has .git)
+  if (inGitRepo()) {
     try {
       execSync('husky install', { stdio: 'inherit' });
     } catch (e) {
